@@ -1,10 +1,13 @@
 package com.saikrishna.wms.models
 
-import javax.persistence.Embedded
-import javax.persistence.Entity
+import java.util.*
+import javax.persistence.*
 
 @Entity
-data class Customer(@Embedded val name: Name,
-                    @Embedded val fatherName: Name,
-                    val address: String,
-                    val phoneNumber: Long)
+data class Customer(
+        @Id
+        val id: UUID = UUID.randomUUID(),
+        val name: String = "",
+        val fatherName: String = "",
+        val address: String = "",
+        val phoneNumber: Long = 0)

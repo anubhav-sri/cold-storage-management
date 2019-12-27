@@ -1,6 +1,9 @@
 package com.saikrishna.wms.models
 
-class Weight(val value: Double, val unit: WeightUnit) {
+import javax.persistence.Embeddable
+
+@Embeddable
+class Weight(val value: Double = 0.0, val unit: WeightUnit = WeightUnit.KG) {
     enum class WeightUnit {
         KG,
         Quintal,

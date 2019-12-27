@@ -1,35 +1,34 @@
 package com.saikrishna.wms.services
 
 import com.saikrishna.wms.models.Customer
-import com.saikrishna.wms.models.Name
 import com.saikrishna.wms.models.Weight
 import com.saikrishna.wms.repositories.LotDto
 import com.saikrishna.wms.repositories.LotRepository
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
 import java.util.*
 
 internal class LotServiceTest {
 
-    private val lotRepo: LotRepository = mock(LotRepository::class.java)
+    private val lotRepo: LotRepository = mockk()
 
     private var lotService: LotService = LotService(lotRepo)
 
     @Test
     fun shouldSaveTheLot() {
-        val name = Name("", "", "")
-        val customer = Customer(name,
-                name, "addr1", 12342)
+
+        val customer = Customer(UUID.randomUUID(), "name",
+                "fname", "addr1", 12342)
         val lot = LotDto(UUID.randomUUID(), 20,
                 Weight(12.0, Weight.WeightUnit.KG),
                 Weight(23.0, Weight.WeightUnit.KG),
-                customer)
+                customer.id, type = "G4")
+
+        every { lotRepo.save(lot) } returns lot
         lotService.saveLot(lot)
-
-        verify(lotRepo).save(lot)
-
-
+        verify { lotRepo.save(lot) }
     }
 
 }

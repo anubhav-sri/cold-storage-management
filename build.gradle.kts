@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter")
+	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.jetbrains.kotlin:kotlin-reflect")
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compile("org.springframework.boot:spring-boot-starter-data-jdbc")
@@ -31,7 +31,14 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
+	testImplementation("io.rest-assured:spring-mock-mvc:3.0.0")
+// https://mvnrepository.com/artifact/com.ninja-squad/springmockk
+	testImplementation("com.ninja-squad:springmockk:2.0.0")
+
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
+	testImplementation("io.mockk:mockk:1.9.3")
+	testImplementation("com.h2database:h2:1.4.200")
+
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
