@@ -28,20 +28,22 @@ internal class LotIntegrationTest {
     private val objectMapper: ObjectMapper = ObjectMapper()
 
     @Test
-    fun shouldBeAbleToCreateLotUsingPostCall() {
+    fun shouldBeAbleToCreateAndViewLotUsingPostAndGetCall() {
         val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
-        val totalWeight = Weight(144.0, Weight.WeightUnit.KG)
         val customer = UUID.randomUUID()
-        val expectedLotDto = LotDto(id = UUID.randomUUID(), numberOfBags = 12, averageWeight = averageWeight,
-                totalWeight = totalWeight, customer = customer, type = "G4")
-
         val createLotRequest = CreateLotRequest(customer.toString(), 12, averageWeight.value, "G4",
                 "KG")
+
         mockMvc.perform(MockMvcRequestBuilders.post("/lot")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createLotRequest)))
                 .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.numberOfBags", `is`(12)))
+                .andExpect(jsonPath("$.serialNumber", `is`(1)))
 
+        mockMvc.perform(MockMvcRequestBuilders.get("/lot/"+"1"))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.numberOfBags", `is`(12)))
+                .andExpect(jsonPath("$.customer", `is`(customer.toString())))
+                .andExpect(jsonPath("$.serialNumber", `is`(1)))
     }
 }

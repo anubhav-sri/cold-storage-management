@@ -25,7 +25,7 @@ internal class LotControllerTest {
 
         every { lotService.saveLot(any()) } returns expectedLot
 
-        val createLotRequest: CreateLotRequest = CreateLotRequest(
+        val createLotRequest = CreateLotRequest(
                 customerId = customer.id.toString(),
                 numberOfBags = 12,
                 averageWeight = 12.0,
@@ -34,6 +34,25 @@ internal class LotControllerTest {
         val actualLot = lotController.createLot(createLotRequest)
 
         verify { lotService.saveLot(any()) }
+        assertThat(actualLot.body).isEqualTo(expectedLot)
+
+    }
+
+    @Test
+    fun shouldBeAbleToViewTheLot() {
+        val lotController = LotController(lotService)
+        val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
+        val totalWeight = Weight(144.0, Weight.WeightUnit.KG)
+        val customerId = UUID.randomUUID()
+        val lotId = UUID.randomUUID()
+        val expectedLot = LotDto(lotId, 12, averageWeight, totalWeight,
+                customerId, type = "G4", serialNumber = 1)
+
+        every { lotService.findByLotNumber(1).get() } returns expectedLot
+
+        val actualLot = lotController.getByLotNumber(1)
+
+        verify { lotService.findByLotNumber(1) }
         assertThat(actualLot.body).isEqualTo(expectedLot)
 
     }

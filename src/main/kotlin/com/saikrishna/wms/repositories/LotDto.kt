@@ -5,8 +5,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-data class LotDto(
-        @Id
+class LotDto(
         var id: UUID = UUID.randomUUID(),
         val numberOfBags: Int = 0,
         @Embedded
@@ -19,5 +18,14 @@ data class LotDto(
         ])
         var totalWeight: Weight = Weight(0.0, Weight.WeightUnit.KG),
         val customer: UUID = UUID.randomUUID(),
-        val type: String = ""
-)
+        val type: String = "",
+        @Id
+        @GeneratedValue
+        var serialNumber: Int = 0
+
+) {
+//    @CreatedDate
+//    lateinit var createdAt: LocalDateTime
+//    @LastModifiedDate
+//    lateinit var updatedAt: LocalDateTime
+}

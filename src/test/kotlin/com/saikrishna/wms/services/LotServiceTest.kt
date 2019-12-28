@@ -31,4 +31,19 @@ internal class LotServiceTest {
         verify { lotRepo.save(lot) }
     }
 
+    @Test
+    fun shouldFindTheLotBySerialNumber() {
+
+        val customer = Customer(UUID.randomUUID(), "name",
+                "fname", "addr1", 12342)
+        val lot = LotDto(UUID.randomUUID(), 20,
+                Weight(12.0, Weight.WeightUnit.KG),
+                Weight(23.0, Weight.WeightUnit.KG),
+                customer.id, type = "G4", serialNumber = 1)
+
+        every { lotRepo.findById(1).get() } returns lot
+        lotService.findByLotNumber(lot.serialNumber)
+        verify { lotRepo.findById(lot.serialNumber) }
+    }
+
 }
