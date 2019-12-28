@@ -5,7 +5,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-class LotDto(
+class Lot(
         var id: UUID = UUID.randomUUID(),
         val numberOfBags: Int = 0,
         @Embedded
@@ -20,7 +20,8 @@ class LotDto(
         val customer: UUID = UUID.randomUUID(),
         val type: String = "",
         @Id
-        @GeneratedValue
+        @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                generator="lot_serial_number_seq")
         var serialNumber: Int = 0
 
 ) {

@@ -1,7 +1,7 @@
 package com.saikrishna.wms.controllers
 
 import com.saikrishna.wms.models.Weight
-import com.saikrishna.wms.repositories.LotDto
+import com.saikrishna.wms.repositories.Lot
 import java.util.*
 
 class CreateLotRequest(val customerId: String = "",
@@ -10,8 +10,8 @@ class CreateLotRequest(val customerId: String = "",
                        val type: String = "",
                        val weightUnit: String = "") {
 
-    fun toLotDto(): LotDto {
-        return LotDto(UUID.randomUUID(),
+    fun toLotDto(): Lot {
+        return Lot(UUID.randomUUID(),
                 numberOfBags,
                 Weight(averageWeight, Weight.WeightUnit.valueOf(weightUnit)),
                 Weight(averageWeight.times(numberOfBags), Weight.WeightUnit.valueOf(weightUnit)),

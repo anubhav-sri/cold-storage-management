@@ -2,7 +2,7 @@ package com.saikrishna.wms.services
 
 import com.saikrishna.wms.models.Customer
 import com.saikrishna.wms.models.Weight
-import com.saikrishna.wms.repositories.LotDto
+import com.saikrishna.wms.repositories.Lot
 import com.saikrishna.wms.repositories.LotRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -21,7 +21,7 @@ internal class LotServiceTest {
 
         val customer = Customer(UUID.randomUUID(), "name",
                 "fname", "addr1", 12342)
-        val lot = LotDto(UUID.randomUUID(), 20,
+        val lot = Lot(UUID.randomUUID(), 20,
                 Weight(12.0, Weight.WeightUnit.KG),
                 Weight(23.0, Weight.WeightUnit.KG),
                 customer.id, type = "G4")
@@ -36,7 +36,7 @@ internal class LotServiceTest {
 
         val customer = Customer(UUID.randomUUID(), "name",
                 "fname", "addr1", 12342)
-        val lot = LotDto(UUID.randomUUID(), 20,
+        val lot = Lot(UUID.randomUUID(), 20,
                 Weight(12.0, Weight.WeightUnit.KG),
                 Weight(23.0, Weight.WeightUnit.KG),
                 customer.id, type = "G4", serialNumber = 1)
