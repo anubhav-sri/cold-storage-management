@@ -31,7 +31,7 @@ dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.springframework.boot:spring-boot-starter-data-jdbc")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.flywaydb:flyway-core:6.1.3")
+//    implementation("org.flywaydb:flyway-core:6.1.3")
     implementation("org.postgresql:postgresql:42.2.9")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
