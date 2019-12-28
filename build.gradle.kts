@@ -43,7 +43,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "org.gradle.sample.Main"
+    mainClassName = "com.saikrishna.wms.Application"
 }
 tasks.withType<Test> {
     useJUnitPlatform()
