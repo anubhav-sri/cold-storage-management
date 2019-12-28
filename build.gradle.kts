@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
     id("application")
@@ -7,6 +8,7 @@ plugins {
     kotlin("jvm") version "1.3.50"
     kotlin("plugin.spring") version "1.3.50"
     kotlin("plugin.allopen") version "1.3.61"
+    kotlin("kapt") version "1.3.61"
 }
 
 allOpen {
@@ -29,6 +31,7 @@ dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.springframework.boot:spring-boot-starter-data-jdbc")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.postgresql:postgresql:42.2.9")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
@@ -38,12 +41,12 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("io.mockk:mockk:1.9.3")
     testImplementation("com.h2database:h2:1.4.200")
-
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
 }
 
 application {
-    mainClassName = "com.saikrishna.wms.Application"
+    mainClassName = "com.saikrishna.wms.ApplicationKt"
 }
 tasks.withType<Test> {
     useJUnitPlatform()
