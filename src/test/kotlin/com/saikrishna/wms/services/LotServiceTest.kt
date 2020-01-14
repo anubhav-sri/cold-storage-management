@@ -20,7 +20,7 @@ internal class LotServiceTest {
     fun shouldSaveTheLot() {
 
         val customer = Customer(UUID.randomUUID(), "name",
-                "fname", "addr1", 12342)
+                "fname", "addr1", "12342")
         val lot = Lot(UUID.randomUUID(), 20,
                 Weight(12.0, Weight.WeightUnit.KG),
                 Weight(23.0, Weight.WeightUnit.KG),
@@ -35,7 +35,7 @@ internal class LotServiceTest {
     fun shouldFindTheLotBySerialNumber() {
 
         val customer = Customer(UUID.randomUUID(), "name",
-                "fname", "addr1", 12342)
+                "fname", "addr1", "12342")
         val lot = Lot(UUID.randomUUID(), 20,
                 Weight(12.0, Weight.WeightUnit.KG),
                 Weight(23.0, Weight.WeightUnit.KG),

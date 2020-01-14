@@ -1,6 +1,7 @@
 package com.saikrishna.wms.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.saikrishna.wms.models.Customer
 import com.saikrishna.wms.models.Weight
 import org.hamcrest.core.Is.`is`
 import org.junit.jupiter.api.Test
@@ -28,20 +29,20 @@ internal class LotIntegrationTest {
     @Test
     fun shouldBeAbleToCreateAndViewLotUsingPostAndGetCall() {
         val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
-        val customer = UUID.randomUUID()
-        val createLotRequest = CreateLotRequest(customer.toString(), 12, averageWeight.value, "G4",
+        val customer = Customer(UUID.randomUUID(),"","","","9159989867")
+        val createLotRequest = CreateLotRequest(customer, 12, averageWeight.value, "G4",
                 "KG")
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lot")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createLotRequest)))
                 .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.serialNumber", `is`(1)))
+                .andExpect(jsonPath("$.lot.serialNumber", `is`(1)))
 
         mockMvc.perform(MockMvcRequestBuilders.get("/lot/"+"1"))
                 .andExpect(status().isOk)
-                .andExpect(jsonPath("$.numberOfBags", `is`(12)))
-                .andExpect(jsonPath("$.customer", `is`(customer.toString())))
-                .andExpect(jsonPath("$.serialNumber", `is`(1)))
+                .andExpect(jsonPath("$.lot.numberOfBags", `is`(12)))
+                .andExpect(jsonPath("$.customer.phoneNumber", `is`(customer.phoneNumber)))
+                .andExpect(jsonPath("$.lot.serialNumber", `is`(1)))
     }
 }
