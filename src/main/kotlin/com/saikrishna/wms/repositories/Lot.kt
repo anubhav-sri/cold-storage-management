@@ -19,7 +19,7 @@ class Lot(
         var totalWeight: Weight = Weight(0.0, Weight.WeightUnit.KG),
         val customer: UUID = UUID.randomUUID(),
         val type: String = "",
-        val numberOfEmptyBagsProvided: Int = 0,
+        val numberOfEmptyBagsGiven: Int = 0,
         val isPalledariPaid: Boolean = false,
         val comments: String = "",
         @Id

@@ -44,7 +44,7 @@ internal class LotIntegrationTest {
                 .andExpect(jsonPath("$.customer.phoneNumber", `is`(customer.phoneNumber)))
                 .andExpect(jsonPath("$.lot.serialNumber", `is`(1)))
                 .andExpect(jsonPath("$.lot.palledariPaid", `is`(true)))
-                .andExpect(jsonPath("$.lot.numberOfEmptyBagsProvided", `is`(10)))
+                .andExpect(jsonPath("$.lot.numberOfEmptyBagsGiven", `is`(10)))
                 .andExpect(jsonPath("$.lot.comments", `is`("com")))
                 .andExpect(jsonPath("$.customer.fatherName", `is`("fname")))
     }
