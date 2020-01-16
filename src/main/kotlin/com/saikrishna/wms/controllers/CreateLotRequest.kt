@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 class CreateLotRequest(val customer: Customer = Customer(),
-                       val date: LocalDateTime,
+                       val date: String,
                        val numberOfBags: Int = 0,
                        val averageWeight: Double = 0.0,
                        val type: String = "",
@@ -18,7 +18,7 @@ class CreateLotRequest(val customer: Customer = Customer(),
 
     fun toLotDto(customerId: UUID): Lot {
         return Lot(UUID.randomUUID(),
-                date,
+                LocalDateTime.parse(date),
                 numberOfBags,
                 Weight(averageWeight, Weight.WeightUnit.valueOf(weightUnit)),
                 Weight(averageWeight.times(numberOfBags), Weight.WeightUnit.valueOf(weightUnit)),

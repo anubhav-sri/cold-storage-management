@@ -30,8 +30,8 @@ internal class LotIntegrationTest {
     fun shouldBeAbleToCreateAndViewLotUsingPostAndGetCall() {
         val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
         val customer = Customer(UUID.randomUUID(), "", "fname", "", "9159989867")
-        val date = LocalDateTime.now()
-        val createLotRequest = CreateLotRequest(customer, date, 12, averageWeight.value, "G4",
+        val createLotRequest = CreateLotRequest(customer, "2020-01-16T19:02:42.531",
+                12, averageWeight.value, "G4",
                 "KG", 10, true, "com")
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lot")
@@ -48,7 +48,7 @@ internal class LotIntegrationTest {
                 .andExpect(jsonPath("$.lot.palledariPaid", `is`(true)))
                 .andExpect(jsonPath("$.lot.numberOfEmptyBagsGiven", `is`(10)))
                 .andExpect(jsonPath("$.lot.comments", `is`("com")))
-                .andExpect(jsonPath("$.lot.date", `is`(date.toString())))
+                .andExpect(jsonPath("$.lot.date", `is`("2020-01-16T19:02:42.531")))
                 .andExpect(jsonPath("$.customer.fatherName", `is`("fname")))
     }
 }
