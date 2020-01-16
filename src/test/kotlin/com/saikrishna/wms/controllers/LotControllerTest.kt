@@ -12,6 +12,7 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentCaptor
+import java.time.LocalDateTime
 import java.util.*
 
 internal class LotControllerTest {
@@ -24,9 +25,10 @@ internal class LotControllerTest {
         val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
         val totalWeight = Weight(144.0, Weight.WeightUnit.KG)
         val customer = Customer(name = "name", fatherName = "fname", address = "addd", phoneNumber = "1212")
-        val lotDto = Lot(numberOfBags = 12, averageWeight = averageWeight, customer = customer.id, type = "G4"
+        val date = LocalDateTime.now()
+        val lotDto = Lot(date = date, numberOfBags = 12, averageWeight = averageWeight, customer = customer.id, type = "G4"
                 , isPalledariPaid = true, numberOfEmptyBagsGiven = 10, comments = "comments")
-        val lot = Lot(lotDto.id, lotDto.numberOfBags,
+        val lot = Lot(lotDto.id, lotDto.date, lotDto.numberOfBags,
                 averageWeight, totalWeight, customer.id, "G4",
                 numberOfEmptyBagsGiven = lotDto.numberOfEmptyBagsGiven,
                 isPalledariPaid = lotDto.isPalledariPaid, comments = lotDto.comments)
@@ -37,6 +39,7 @@ internal class LotControllerTest {
         every { customerService.saveCustomer(any()) } returns customer
 
         val createLotRequest = CreateLotRequest(
+                date = date,
                 customer = customer,
                 numberOfBags = 12,
                 averageWeight = 12.0,
@@ -69,7 +72,8 @@ internal class LotControllerTest {
         val lotId = UUID.randomUUID()
         val customer = Customer(name = "name", fatherName = "fname", address = "", phoneNumber = "1212")
 
-        val lot = Lot(lotId, 12, averageWeight, totalWeight,
+        val date = LocalDateTime.now()
+        val lot = Lot(lotId, date,12, averageWeight, totalWeight,
                 customer.id, type = "G4", serialNumber = 1)
         val expectedLotResponse = LotResponse(customer,
                 lot)

@@ -8,6 +8,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
 import java.util.*
 
 internal class LotServiceTest {
@@ -21,7 +22,7 @@ internal class LotServiceTest {
 
         val customer = Customer(UUID.randomUUID(), "name",
                 "fname", "addr1", "12342")
-        val lot = Lot(UUID.randomUUID(), 20,
+        val lot = Lot(UUID.randomUUID(), LocalDateTime.now(), 20,
                 Weight(12.0, Weight.WeightUnit.KG),
                 Weight(23.0, Weight.WeightUnit.KG),
                 customer.id, type = "G4")
@@ -36,7 +37,7 @@ internal class LotServiceTest {
 
         val customer = Customer(UUID.randomUUID(), "name",
                 "fname", "addr1", "12342")
-        val lot = Lot(UUID.randomUUID(), 20,
+        val lot = Lot(UUID.randomUUID(), LocalDateTime.now(), 20,
                 Weight(12.0, Weight.WeightUnit.KG),
                 Weight(23.0, Weight.WeightUnit.KG),
                 customer.id, type = "G4", serialNumber = 1)

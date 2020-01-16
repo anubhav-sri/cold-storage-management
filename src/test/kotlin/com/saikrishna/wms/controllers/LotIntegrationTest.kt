@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -28,9 +29,10 @@ internal class LotIntegrationTest {
     @Test
     fun shouldBeAbleToCreateAndViewLotUsingPostAndGetCall() {
         val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
-        val customer = Customer(UUID.randomUUID(),"","fname","","9159989867")
-        val createLotRequest = CreateLotRequest(customer, 12, averageWeight.value, "G4",
-                "KG",10,true,"com")
+        val customer = Customer(UUID.randomUUID(), "", "fname", "", "9159989867")
+        val date = LocalDateTime.now()
+        val createLotRequest = CreateLotRequest(customer, date, 12, averageWeight.value, "G4",
+                "KG", 10, true, "com")
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lot")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -38,7 +40,7 @@ internal class LotIntegrationTest {
                 .andExpect(status().isCreated)
                 .andExpect(jsonPath("$.lot.serialNumber", `is`(1)))
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/lot/"+"1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/lot/" + "1"))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.lot.numberOfBags", `is`(12)))
                 .andExpect(jsonPath("$.customer.phoneNumber", `is`(customer.phoneNumber)))
@@ -46,6 +48,7 @@ internal class LotIntegrationTest {
                 .andExpect(jsonPath("$.lot.palledariPaid", `is`(true)))
                 .andExpect(jsonPath("$.lot.numberOfEmptyBagsGiven", `is`(10)))
                 .andExpect(jsonPath("$.lot.comments", `is`("com")))
+                .andExpect(jsonPath("$.lot.date", `is`(date.toString())))
                 .andExpect(jsonPath("$.customer.fatherName", `is`("fname")))
     }
 }

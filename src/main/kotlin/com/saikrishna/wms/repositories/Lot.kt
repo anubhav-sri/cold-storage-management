@@ -1,12 +1,14 @@
 package com.saikrishna.wms.repositories
 
 import com.saikrishna.wms.models.Weight
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
 @Entity
 class Lot(
         var id: UUID = UUID.randomUUID(),
+        var date: LocalDateTime,
         val numberOfBags: Int = 0,
         @Embedded
         @AttributeOverrides(value = [AttributeOverride(name = "value", column = Column(name = "avg_weight_value")), AttributeOverride(name = "unit", column = Column(name = "avg_weight_unit"))])
