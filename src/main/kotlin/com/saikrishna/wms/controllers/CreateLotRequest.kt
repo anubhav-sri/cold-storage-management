@@ -9,7 +9,10 @@ class CreateLotRequest(val customer: Customer = Customer(),
                        val numberOfBags: Int = 0,
                        val averageWeight: Double = 0.0,
                        val type: String = "",
-                       val weightUnit: String = "") {
+                       val weightUnit: String = "",
+                       val numberOfEmptyBagsGiven: Int = 0,
+                       val palledariPaid: Boolean,
+                       val comments: String) {
 
     fun toLotDto(customerId: UUID): Lot {
         return Lot(UUID.randomUUID(),
@@ -17,7 +20,11 @@ class CreateLotRequest(val customer: Customer = Customer(),
                 Weight(averageWeight, Weight.WeightUnit.valueOf(weightUnit)),
                 Weight(averageWeight.times(numberOfBags), Weight.WeightUnit.valueOf(weightUnit)),
                 customerId,
-                type)
+                type,
+                numberOfEmptyBagsGiven,
+                palledariPaid,
+                comments
+        )
 
     }
 

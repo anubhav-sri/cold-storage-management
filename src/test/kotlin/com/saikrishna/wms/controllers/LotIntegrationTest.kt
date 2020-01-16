@@ -17,7 +17,6 @@ import java.util.*
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@WebMvcTest
 @AutoConfigureMockMvc
 internal class LotIntegrationTest {
 
@@ -29,9 +28,9 @@ internal class LotIntegrationTest {
     @Test
     fun shouldBeAbleToCreateAndViewLotUsingPostAndGetCall() {
         val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
-        val customer = Customer(UUID.randomUUID(),"","","","9159989867")
+        val customer = Customer(UUID.randomUUID(),"","fname","","9159989867")
         val createLotRequest = CreateLotRequest(customer, 12, averageWeight.value, "G4",
-                "KG")
+                "KG",10,true,"com")
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lot")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -44,5 +43,9 @@ internal class LotIntegrationTest {
                 .andExpect(jsonPath("$.lot.numberOfBags", `is`(12)))
                 .andExpect(jsonPath("$.customer.phoneNumber", `is`(customer.phoneNumber)))
                 .andExpect(jsonPath("$.lot.serialNumber", `is`(1)))
+                .andExpect(jsonPath("$.lot.palledariPaid", `is`(true)))
+                .andExpect(jsonPath("$.lot.numberOfEmptyBagsProvided", `is`(10)))
+                .andExpect(jsonPath("$.lot.comments", `is`("com")))
+                .andExpect(jsonPath("$.customer.fatherName", `is`("fname")))
     }
 }

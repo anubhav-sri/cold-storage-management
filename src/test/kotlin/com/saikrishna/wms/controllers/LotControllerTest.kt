@@ -24,8 +24,11 @@ internal class LotControllerTest {
         val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
         val totalWeight = Weight(144.0, Weight.WeightUnit.KG)
         val customer = Customer(name = "name", fatherName = "fname", address = "addd", phoneNumber = "1212")
-        val lotDto = Lot(numberOfBags = 12, averageWeight = averageWeight, customer = customer.id, type = "G4")
-        val lot = Lot(lotDto.id, lotDto.numberOfBags, averageWeight, totalWeight, customer.id, type = "G4")
+        val lotDto = Lot(numberOfBags = 12, averageWeight = averageWeight, customer = customer.id, type = "G4"
+                , isPalledariPaid = true, numberOfEmptyBagsProvided = 10, comments = "comments")
+        val lot = Lot(lotDto.id, lotDto.numberOfBags,
+                averageWeight, totalWeight, customer.id, "G4", numberOfEmptyBagsProvided = lotDto.numberOfEmptyBagsProvided,
+                isPalledariPaid = lotDto.isPalledariPaid, comments = lotDto.comments)
         val expectedLotResponse = LotResponse(customer,
                 lot)
 
@@ -36,17 +39,22 @@ internal class LotControllerTest {
                 customer = customer,
                 numberOfBags = 12,
                 averageWeight = 12.0,
-                type = "G4", weightUnit = Weight.WeightUnit.KG.name
-        )
+                type = "G4", weightUnit = Weight.WeightUnit.KG.name,
+                numberOfEmptyBagsGiven = 10,
+                comments = "comments", palledariPaid = true)
         val actualLot = lotController.createLot(createLotRequest)
 
-        verify { lotService.saveLot(withArg {
-            assertThat(it).isEqualToIgnoringGivenFields(lot,"id")
-        }) }
+        verify {
+            lotService.saveLot(withArg {
+                assertThat(it).isEqualToIgnoringGivenFields(lot, "id")
+            })
+        }
 
-        verify { customerService.saveCustomer(withArg {
-            assertThat(it).isEqualToIgnoringGivenFields(customer,"id")
-        }) }
+        verify {
+            customerService.saveCustomer(withArg {
+                assertThat(it).isEqualToIgnoringGivenFields(customer, "id")
+            })
+        }
         assertThat(actualLot.body).isEqualToIgnoringGivenFields(expectedLotResponse,
                 "customer.id", "lot.id")
 
