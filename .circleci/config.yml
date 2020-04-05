@@ -1,8 +1,78 @@
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
 version: 2
-  jobs:
-    build:
-      docker:
-          - image: circleci/java:1.13
-      steps:
-        - checkout
-        - run: echo "A first hello"
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:11-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: gradle dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      # run tests!
+      - run: gradle test
+      - run: gradle assemble
+      - store_artifacts:
+          path: build/libs
+      - persist_to_workspace:
+          root: build/libs
+          paths:
+            - wms-0.0.1-SNAPSHOT.jar
+  deploy:
+    machine:
+      enabled: true
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "ec:83:82:5a:57:f3:24:7f:e1:6f:73:55:16:e7:e8:35"
+            - "db:89:62:b0:a2:77:d9:1e:8e:40:a7:bf:fe:c7:d5:bb"
+      - attach_workspace:
+          at: /tmp/build/libs
+      - run:
+          name: Deploy in test environment
+          command: |
+            scp -vv /tmp/build/libs/wms-0.0.1-SNAPSHOT.jar $SSH_USER@$SSH_HOST:~/
+      - run:
+          name: Deploy in Prod environment
+          command: |
+            scp -vv /tmp/build/libs/wms-0.0.1-SNAPSHOT.jar $SSH_USER@$SSH_HOST_PROD:~/
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build # only deploy once build job has completed
+          filters:
+            branches:
+              only: master # only deploy on the master branch
