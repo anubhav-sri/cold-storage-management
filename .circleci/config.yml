@@ -64,7 +64,7 @@ jobs:
       - run:
           name: Deploy in Prod environment
           command: |
-            scp -vv /tmp/build/libs/wms-0.0.1-SNAPSHOT.jar $SSH_USER@$SSH_HOST_PROD:~/
+            scp -P3456 -vv /tmp/build/libs/wms-0.0.1-SNAPSHOT.jar $SSH_USER@$SSH_HOST_PROD:~/
 workflows:
   version: 2
   build-and-deploy:
