@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*
 import java.net.URI
 
 @RestController
+@CrossOrigin
 class LotController(@Autowired private val lotService: LotService,
                     @Autowired private val customerService: CustomerService) {
 
