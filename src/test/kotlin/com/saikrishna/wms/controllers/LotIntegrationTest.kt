@@ -57,12 +57,6 @@ internal class LotIntegrationTest {
 
     @Test
     fun shouldBeAbleToBulkUplaodLotData() {
-        val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
-        val customer = Customer(UUID.randomUUID(), "", "fname", "", "9159989867")
-        val createLotRequest = CreateLotRequest(customer, "2020-01-16T19:02:42.531",
-                12, averageWeight.value, "G4",
-                "KG", 10, true, "com")
-
         mockMvc.perform(MockMvcRequestBuilders
                 .multipart("/uploadLotData")
                 .file(MockMultipartFile("file", "dataFile.csv", null, this.javaClass.classLoader.getResourceAsStream("testFile.csv"))))
