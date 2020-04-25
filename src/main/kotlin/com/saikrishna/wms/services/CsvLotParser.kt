@@ -8,8 +8,10 @@ import com.saikrishna.wms.models.CustomerLot
 import lombok.extern.slf4j.Slf4j
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
 
+@Component
 open class CsvLotParser {
     open fun parseCsvToLot(dataFile: MultipartFile): List<CustomerLot> {
         return try {

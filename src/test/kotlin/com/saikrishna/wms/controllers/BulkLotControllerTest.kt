@@ -30,7 +30,7 @@ internal class BulkLotControllerTest {
     @Test
     fun `should save the csv file to the service`() {
         val bulkLotController = BulkLotController(lotService, customerService, csvLotParser)
-        val file = MockMultipartFile("newData.csv", Files.newInputStream(Path.of("/Users/anubhavsrivastava/code/sai/wms/src/test/resources/testFile.csv")))
+        val file = MockMultipartFile("file", "newData.csv", null, Files.newInputStream(Path.of("/Users/anubhavsrivastava/code/sai/wms/src/test/resources/testFile.csv")))
 
         val customerLotInFile = CustomerLot(1,
                 "someName", "fatherName", "address", "phoneNumber", "20-09-2019",
