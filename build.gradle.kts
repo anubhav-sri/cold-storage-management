@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
     id("application")
@@ -31,8 +30,11 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.5.3")
 //    implementation("org.flywaydb:flyway-core:6.1.3")
     implementation("org.postgresql:postgresql:42.2.9")
+    implementation("org.projectlombok:lombok:1.18.12")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }

@@ -1,9 +1,7 @@
 package com.saikrishna.wms.controllers
 
 import com.saikrishna.wms.exceptions.InvalidFileNameException
-import com.saikrishna.wms.models.Customer
 import com.saikrishna.wms.models.CustomerLot
-import com.saikrishna.wms.repositories.Lot
 import com.saikrishna.wms.services.CsvLotParser
 import com.saikrishna.wms.services.CustomerService
 import com.saikrishna.wms.services.LotService
@@ -16,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.mock.web.MockMultipartFile
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.*
 
 internal class BulkLotControllerTest {
     private val customerService: CustomerService = mockk()
@@ -34,17 +33,18 @@ internal class BulkLotControllerTest {
         val bulkLotController = BulkLotController(lotService, customerService, csvLotParser)
         val file = MockMultipartFile("newData.csv", Files.newInputStream(Path.of("/Users/anubhavsrivastava/code/sai/wms/src/test/resources/testFile.csv")))
 
-        val lotInFile = Lot()
-        val customerOnFile = Customer()
-        val customerLots = listOf(CustomerLot(customerOnFile, lotInFile))
+        val customerLotInFile = CustomerLot( 1,
+                "someName", "fatherName", "address", "phoneNumber", "20-09-2019",
+                12, 50.0, "G4", 12,false, "comments")
+        val customerLots = listOf(customerLotInFile)
         every { csvLotParser.parseCsvToLot(file) } returns customerLots
-        every { lotService.saveAll(listOf(lotInFile)) } returns listOf(lotInFile)
-        every { customerService.saveAll(listOf(customerOnFile)) } returns listOf(customerOnFile)
+        every { lotService.saveAll(listOf(customerLotInFile.toLot())) } returns listOf(customerLotInFile.toLot())
+        every { customerService.saveAll(listOf(customerLotInFile.toCustomer())) } returns listOf(customerLotInFile.toCustomer())
 
         val lot = bulkLotController.loadData(file)
 
-        verify { lotService.saveAll(listOf(lotInFile)) }
-        verify { customerService.saveAll(listOf(customerOnFile)) }
+        verify { lotService.saveAll(listOf(customerLotInFile.toLot())) }
+        verify { customerService.saveAll(listOf(customerLotInFile.toCustomer())) }
         assertThat(lot).isEqualTo("Saved 1 number of lots")
     }
 }

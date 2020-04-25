@@ -21,8 +21,8 @@ class BulkLotController(@Autowired private val lotService: LotService,
             throw InvalidFileNameException(dataFile.name)
         }
         val customerLots = csvLotParser.parseCsvToLot(dataFile)
-        lotService.saveAll(customerLots.map { customerLot -> customerLot.lot })
-        customerService.saveAll(customerLots.map { customerLot -> customerLot.customer })
+        lotService.saveAll(customerLots.map { customerLot -> customerLot.toLot() })
+        customerService.saveAll(customerLots.map { customerLot -> customerLot.toCustomer() })
         return "Saved ${customerLots.size} number of lots"
     }
 }

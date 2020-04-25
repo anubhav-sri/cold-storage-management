@@ -1,10 +1,28 @@
 package com.saikrishna.wms.services
 
+import com.fasterxml.jackson.databind.MappingIterator
+import com.fasterxml.jackson.dataformat.csv.CsvMapper
+import com.fasterxml.jackson.dataformat.csv.CsvSchema
+import com.saikrishna.wms.exceptions.FailedToParseCsvFileException
 import com.saikrishna.wms.models.CustomerLot
+import lombok.extern.slf4j.Slf4j
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.web.multipart.MultipartFile
 
+
+@Slf4j
 class CsvLotParser {
+    val logger: Logger = LoggerFactory.getLogger(this::class.java)
     fun parseCsvToLot(dataFile: MultipartFile): List<CustomerLot> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return try {
+            val bootstrapSchema = CsvSchema.emptySchema().withHeader()
+            val mapper = CsvMapper()
+            val readValues: MappingIterator<CustomerLot> = mapper.readerFor(CustomerLot::class.java).with(bootstrapSchema).readValues(dataFile.resource.inputStream)
+            readValues.readAll()
+        } catch (ex: Exception) {
+            logger.error("Unable to parse the file", ex)
+            throw FailedToParseCsvFileException()
+        }
     }
 }
