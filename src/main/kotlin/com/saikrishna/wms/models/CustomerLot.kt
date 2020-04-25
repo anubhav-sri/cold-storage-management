@@ -1,10 +1,10 @@
 package com.saikrishna.wms.models
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.saikrishna.wms.repositories.Lot
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -41,7 +41,9 @@ class CustomerLot(
     }
 
     fun toLot(): Lot {
-        return Lot(UUID.randomUUID(), LocalDateTime.parse(date), numberOfBags, Weight(averageWeight), Weight(averageWeight.times(numberOfBags)), customerId,
+        return Lot(UUID.randomUUID(),
+                LocalDate.parse(date, DateTimeFormatter.ofPattern("DD-mm-yyyy")).atStartOfDay()
+                , numberOfBags, Weight(averageWeight), Weight(averageWeight.times(numberOfBags)), customerId,
                 type, numberOfEmptyBagsGiven, palledariPaid, comments, lotNumber)
     }
 }

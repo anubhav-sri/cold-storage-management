@@ -18,7 +18,7 @@ class Lot(
             AttributeOverride(name = "value", column = Column(name = "tot_weight_value")),
             AttributeOverride(name = "unit", column = Column(name = "tot_weight_unit"))
         ])
-        var totalWeight: Weight = Weight(0.0, Weight.WeightUnit.KG),
+        var totalWeight: Weight? = Weight(0.0, Weight.WeightUnit.KG),
         val customer: UUID = UUID.randomUUID(),
         val type: String = "",
         val numberOfEmptyBagsGiven: Int = 0,

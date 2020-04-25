@@ -44,8 +44,10 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("io.mockk:mockk:1.9.3")
     implementation("com.h2database:h2:1.4.200")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
+
 }
 
 application {

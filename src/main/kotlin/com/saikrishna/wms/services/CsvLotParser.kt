@@ -10,11 +10,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.multipart.MultipartFile
 
-
-@Slf4j
-class CsvLotParser {
-    val logger: Logger = LoggerFactory.getLogger(this::class.java)
-    fun parseCsvToLot(dataFile: MultipartFile): List<CustomerLot> {
+open class CsvLotParser {
+    open fun parseCsvToLot(dataFile: MultipartFile): List<CustomerLot> {
         return try {
             val bootstrapSchema = CsvSchema.emptySchema().withHeader()
             val mapper = CsvMapper()
@@ -24,5 +21,9 @@ class CsvLotParser {
             logger.error("Unable to parse the file", ex)
             throw FailedToParseCsvFileException()
         }
+    }
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(this::class.java)
     }
 }

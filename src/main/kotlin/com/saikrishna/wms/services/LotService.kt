@@ -12,7 +12,7 @@ class LotService(@Autowired private val lotRepo: LotRepository
 
 ) {
     fun saveLot(lot: Lot): Lot {
-        lot.totalWeight = Weight(lot.averageWeight.value.times(lot.numberOfBags), lot.averageWeight.unit)
+        calculateTotalWeight(lot)
         return lotRepo.save(lot)
     }
 
@@ -20,7 +20,12 @@ class LotService(@Autowired private val lotRepo: LotRepository
         return lotRepo.findById(serialNumber)
     }
 
-    fun saveAll(lots: List<Lot>): List<Lot> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun saveAll(lots: List<Lot>): Iterable<Lot> {
+        lots.forEach { l -> calculateTotalWeight(l) }
+        return lotRepo.saveAll(lots)
+    }
+
+    private fun calculateTotalWeight(lot: Lot) {
+        lot.totalWeight = Weight(lot.averageWeight.value.times(lot.numberOfBags), lot.averageWeight.unit)
     }
 }
