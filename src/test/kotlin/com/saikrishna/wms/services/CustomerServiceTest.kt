@@ -32,4 +32,12 @@ internal class CustomerServiceTest {
         assertThat(actualCustomer).isEqualTo(customer)
     }
 
+    @Test
+    fun `should save all customers`() {
+        val customer = Customer(UUID.randomUUID(), "name", "fname", "addr", "1212")
+        every { customerRepo.saveAll(listOf(customer)) } returns listOf(customer)
+        customerService.saveAll(listOf(customer))
+        verify { customerRepo.saveAll(listOf(customer)) }
+    }
+
 }

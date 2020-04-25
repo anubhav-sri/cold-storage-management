@@ -17,8 +17,8 @@ class CustomerService(private val customerRepository: CustomerRepository) {
                 .orElseThrow(CustomerNotFoundException::class.java::newInstance)
     }
 
-    fun saveAll(customers: List<Customer>): List<Customer> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun saveAll(customers: List<Customer>): Iterable<Customer> {
+        return customerRepository.saveAll(customers)
     }
 
 }
