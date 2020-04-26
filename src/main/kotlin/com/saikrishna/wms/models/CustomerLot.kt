@@ -42,7 +42,7 @@ class CustomerLot(
 
     fun toLot(): Lot {
         return Lot(UUID.randomUUID(),
-                LocalDate.parse(date, DateTimeFormatter.ofPattern("DD-mm-yyyy")).atStartOfDay()
+                LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).atStartOfDay()
                 , numberOfBags, Weight(averageWeight), Weight(averageWeight.times(numberOfBags)), customerId,
                 type, numberOfEmptyBagsGiven, palledariPaid, comments, lotNumber)
     }

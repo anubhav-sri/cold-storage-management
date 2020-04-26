@@ -63,5 +63,16 @@ internal class LotIntegrationTest {
                 .andExpect(status().isCreated)
                 .andExpect(content().string("Saved 8 number of lots"))
 
+        mockMvc.perform(MockMvcRequestBuilders.get("/lot/" + lotRepository.count().toInt()))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.lot.numberOfBags", `is`(50)))
+                .andExpect(jsonPath("$.customer.phoneNumber", `is`("8953143293")))
+                .andExpect(jsonPath("$.lot.serialNumber", `is`(lotRepository.count().toInt())))
+                .andExpect(jsonPath("$.lot.palledariPaid", `is`(false)))
+                .andExpect(jsonPath("$.lot.numberOfEmptyBagsGiven", `is`(0)))
+                .andExpect(jsonPath("$.lot.date", `is`("2020-02-25T00:00:00")))
+                .andExpect(jsonPath("$.customer.fatherName", `is`("KANHYAI LAL")))
+
+
     }
 }
