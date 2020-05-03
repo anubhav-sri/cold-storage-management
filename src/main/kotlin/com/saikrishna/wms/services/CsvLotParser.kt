@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import com.fasterxml.jackson.dataformat.csv.CsvSchema
 import com.saikrishna.wms.exceptions.FailedToParseCsvFileException
 import com.saikrishna.wms.models.CustomerLot
-import lombok.extern.slf4j.Slf4j
+import com.saikrishna.wms.models.LotLocationDTO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -18,6 +18,20 @@ open class CsvLotParser {
             val bootstrapSchema = CsvSchema.emptySchema().withHeader()
             val mapper = CsvMapper()
             val readValues: MappingIterator<CustomerLot> = mapper.readerFor(CustomerLot::class.java).with(bootstrapSchema).readValues(dataFile.resource.inputStream)
+            readValues.readAll()
+        } catch (ex: Exception) {
+            logger.error("Unable to parse the file", ex)
+            throw FailedToParseCsvFileException()
+        }
+    }
+
+    open fun parseCsvToLotLocation(dataFile: MultipartFile): List<LotLocationDTO> {
+        return try {
+            val bootstrapSchema = CsvSchema.emptySchema().withHeader()
+            val mapper = CsvMapper()
+            val readValues: MappingIterator<LotLocationDTO> = mapper.readerFor(LotLocationDTO::class.java)
+                    .with(bootstrapSchema)
+                    .readValues(dataFile.resource.inputStream)
             readValues.readAll()
         } catch (ex: Exception) {
             logger.error("Unable to parse the file", ex)

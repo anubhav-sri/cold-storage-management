@@ -1,21 +1,25 @@
 package com.saikrishna.wms.services
 
 import com.nhaarman.mockitokotlin2.*
-import com.saikrishna.wms.models.Customer
-import com.saikrishna.wms.models.Weight
+import com.saikrishna.wms.models.*
 import com.saikrishna.wms.repositories.Lot
+import com.saikrishna.wms.repositories.LotLocationRepository
 import com.saikrishna.wms.repositories.LotRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentCaptor
+import org.mockito.Captor
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
+
 
 internal class LotServiceTest {
 
     private val lotRepo: LotRepository = mock()
+    private val lotLocationRepository: LotLocationRepository = mock()
 
-    private var lotService: LotService = LotService(lotRepo)
+    private var lotService: LotService = LotService(lotRepo, lotLocationRepository)
 
     @Test
     fun shouldSaveTheLot() {
@@ -74,6 +78,49 @@ internal class LotServiceTest {
         given(lotRepo.findById(1)).willReturn(Optional.of(lot))
         lotService.findByLotNumber(lot.serialNumber)
         verify(lotRepo).findById(lot.serialNumber)
+    }
+
+    @Test
+    fun `should update the locations`() {
+        val customer = Customer(UUID.randomUUID(), "name",
+                "fname", "addr1", "12342")
+        val lot = Lot(UUID.randomUUID(), LocalDateTime.now(), 20,
+                Weight(12.0, Weight.WeightUnit.KG),
+                Weight(23.0, Weight.WeightUnit.KG),
+                customer.id, type = "G4", serialNumber = 1)
+        val lotLocation = LotLocation(lot = lot, id = LotLocationId(lot.serialNumber, "1-A-24"), date = LocalDate.now()
+                , location = Location("1-A-24", 1, 'A', 24))
+        lot.location = linkedSetOf(lotLocation)
+
+        lotService.updateLocations(listOf(lotLocation))
+
+        verify(lotRepo).saveAll(listOf(lot))
+    }
+
+    @Test
+    fun `should update the locations when called multiple times`() {
+        val customer = Customer(UUID.randomUUID(), "name",
+                "fname", "addr1", "12342")
+        val lot = Lot(UUID.randomUUID(), LocalDateTime.now(), 20,
+                Weight(12.0, Weight.WeightUnit.KG),
+                Weight(23.0, Weight.WeightUnit.KG),
+                customer.id, type = "G4", serialNumber = 1)
+
+        val lotLocation = LotLocation(lot = lot, id = LotLocationId(lot.serialNumber, "1-A-24"), date = LocalDate.now()
+                , location = Location("1-A-24", 1, 'A', 24))
+
+        val newLotLocation = LotLocation(lot = lot, id = LotLocationId(lot.serialNumber, "1-A-26"), date = LocalDate.now()
+                , location = Location("1-A-26", 1, 'A', 26))
+        lot.location = linkedSetOf(lotLocation)
+        lotService.updateLocations(listOf(lotLocation))
+
+        val newLot = lot.copy()
+        newLot.location = linkedSetOf(newLotLocation)
+        verify(lotRepo, atLeastOnce()).saveAll(listOf(lot))
+
+        lotService.updateLocations(listOf(newLotLocation))
+        verify(lotRepo, atLeastOnce()).saveAll(listOf(newLot))
+
     }
 
 }

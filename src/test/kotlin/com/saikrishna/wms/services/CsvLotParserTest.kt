@@ -2,6 +2,7 @@ package com.saikrishna.wms.services
 
 import com.saikrishna.wms.exceptions.FailedToParseCsvFileException
 import com.saikrishna.wms.models.CustomerLot
+import com.saikrishna.wms.models.LotLocationDTO
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -33,6 +34,18 @@ internal class CsvLotParserTest {
         assertThat(parseCsvToLot.size).isEqualTo(1)
         val parsedRow = parseCsvToLot[0]
         assertThat(parsedRow).isEqualToIgnoringGivenFields(expectedCustomerLot, "customerId", "lotId")
+    }
+
+    @Test
+    fun `should parse the csv to lot location objects with single row`() {
+        val resourceAsStream = this.javaClass.classLoader.getResourceAsStream("testFile_lot_location.csv")
+        val file = MockMultipartFile("newData.csv", resourceAsStream)
+        val parseCsvToLotLocation = csvLotParser.parseCsvToLotLocation(file)
+
+        val expectedLotLocation = LotLocationDTO(1, "25-02-2020", "1-A-24")
+        assertThat(parseCsvToLotLocation.size).isEqualTo(1)
+        val parsedRow = parseCsvToLotLocation[0]
+        assertThat(parsedRow).isEqualToIgnoringGivenFields(expectedLotLocation)
     }
 
     @Test
