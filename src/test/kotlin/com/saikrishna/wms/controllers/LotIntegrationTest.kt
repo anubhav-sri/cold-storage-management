@@ -4,11 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.saikrishna.wms.models.Customer
 import com.saikrishna.wms.models.Location
 import com.saikrishna.wms.models.Weight
-import com.saikrishna.wms.repositories.*
-import org.hamcrest.CoreMatchers.hasItem
-import org.hamcrest.Matchers.*
+import com.saikrishna.wms.repositories.LocationRepository
+import com.saikrishna.wms.repositories.Lot
+import com.saikrishna.wms.repositories.LotRepository
+import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.core.Is.`is`
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestMethodOrder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -78,9 +82,8 @@ internal class LotIntegrationTest {
                 .andExpect(jsonPath("$.lot.palledariPaid", `is`(false)))
                 .andExpect(jsonPath("$.lot.numberOfEmptyBagsGiven", `is`(0)))
                 .andExpect(jsonPath("$.lot.date", `is`("2020-02-25T00:00:00")))
+                .andExpect(jsonPath("$.lot.loan.principal", `is`(2000.0)))
                 .andExpect(jsonPath("$.customer.fatherName", `is`("KANHYAI LAL")))
-
-
     }
 
     @Test
@@ -111,7 +114,7 @@ internal class LotIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/lot/1"))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.lot.location").isArray)
-                .andExpect(jsonPath("$.lot.location.[*].id.locationId", containsInAnyOrder("1-A-24","1-A-25")))
+                .andExpect(jsonPath("$.lot.location.[*].id.locationId", containsInAnyOrder("1-A-24", "1-A-25")))
 
 
     }

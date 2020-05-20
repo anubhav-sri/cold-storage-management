@@ -8,7 +8,7 @@ import com.saikrishna.wms.repositories.LotRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentCaptor
-import org.mockito.Captor
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -19,7 +19,7 @@ internal class LotServiceTest {
     private val lotRepo: LotRepository = mock()
     private val lotLocationRepository: LotLocationRepository = mock()
 
-    private var lotService: LotService = LotService(lotRepo, lotLocationRepository)
+    private var lotService: LotService = LotService(lotRepo)
 
     @Test
     fun shouldSaveTheLot() {
@@ -120,6 +120,24 @@ internal class LotServiceTest {
 
         lotService.updateLocations(listOf(newLotLocation))
         verify(lotRepo, atLeastOnce()).saveAll(listOf(newLot))
+
+    }
+
+    @Test
+    fun `should be able to add loan to a lot`() {
+        val customer = Customer(UUID.randomUUID(), "name",
+                "fname", "addr1", "12342")
+        val lot = Lot(UUID.randomUUID(), LocalDateTime.now(), 20,
+                Weight(12.0, Weight.WeightUnit.KG),
+                Weight(23.0, Weight.WeightUnit.KG),
+                customer.id, type = "G4", serialNumber = 1)
+        lot.addLoan(Loan(lot.serialNumber, BigDecimal.TEN, LocalDate.now()))
+
+        given(lotRepo.save(lot)).willReturn(lot)
+
+        val savedLot = lotService.saveLot(lot)
+
+        assertThat(savedLot).isEqualTo(lot)
 
     }
 

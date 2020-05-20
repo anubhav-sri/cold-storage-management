@@ -1,9 +1,7 @@
 package com.saikrishna.wms.repositories
 
-import com.saikrishna.wms.models.Location
-import com.saikrishna.wms.models.LotLocation
-import com.saikrishna.wms.models.LotLocationId
-import com.saikrishna.wms.models.Weight
+import com.saikrishna.wms.models.*
+import lombok.Getter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -40,8 +38,15 @@ data class Lot(
     )
     var location: Set<LotLocation> = hashSetOf()
 
+    @OneToOne(cascade = [CascadeType.ALL])
+    var loan: Loan? = null
+
     fun addLocation(location: Location, date: LocalDate) {
         this.location = this.location.plusElement(LotLocation(id = LotLocationId(this.serialNumber, location.id), date = date, location = location, lot = this))
+    }
+
+    fun addLoan(loan: Loan) {
+        this.loan = loan
     }
 
 

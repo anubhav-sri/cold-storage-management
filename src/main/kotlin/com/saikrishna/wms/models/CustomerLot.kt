@@ -2,6 +2,7 @@ package com.saikrishna.wms.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.saikrishna.wms.repositories.Lot
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -32,7 +33,9 @@ class CustomerLot(
         @JsonProperty("PALLEDARI PAID")
         val palledariPaid: Boolean = false,
         @JsonProperty("COMMENTS")
-        val comments: String = "") {
+        val comments: String = "",
+        @JsonProperty("LOAN")
+        val loanAmount: BigDecimal? = null) {
 
     private val customerId: UUID = UUID.randomUUID()
 
@@ -41,9 +44,12 @@ class CustomerLot(
     }
 
     fun toLot(): Lot {
-        return Lot(UUID.randomUUID(),
+        val lot = Lot(UUID.randomUUID(),
                 LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")).atStartOfDay()
                 , numberOfBags, Weight(averageWeight), Weight(averageWeight.times(numberOfBags)), customerId,
                 type, numberOfEmptyBagsGiven, palledariPaid, comments, lotNumber)
+
+        loanAmount?.let { lot.addLoan(Loan(lotNumber, it, lot.date.toLocalDate())) }
+        return lot
     }
 }
