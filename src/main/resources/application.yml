@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: wms-erp
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:h2:mem:lotDb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        ddl-auto=validate: true
+server:
+  port: 8081
+
+---
+spring:
+  profiles: test
+  application:
+    name: wms-erp
+  datasource:
+    url: jdbc:postgresql:lotDb
+    driverClassName: org.postgresql.Driver
+    username: ${database.driver.userName}
+    password: ${database.driver.password}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto=validate: true
+server:
+  port: 8081
+
+---
+spring:
+  profiles: test
+  application:
+    name: wms-erp
+  datasource:
+    url: jdbc:postgresql:lotDb
+    driverClassName: org.postgresql.Driver
+    username: ${database.driver.userName}
+    password: ${database.driver.password}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto=validate: true
+server:
+  port: 8081
