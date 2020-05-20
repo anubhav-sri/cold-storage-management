@@ -1,17 +1,13 @@
--- CREATE TABLE lot (id uuid,
--- number_of_bags integer,
--- avg_weight_value double precision ,
--- avg_weight_unit varchar(10),
--- tot_weight_value double precision,
--- tot_weight_unit varchar(10) ,
--- customer uuid,
--- type varchar(20),
--- serial_number serial
---  );
---
--- CREATE TABLE customer (id uuid,
---                        name varchar(100),
---                        father_name varchar(100),
---                        address varchar(200),
---                        phone_number bigint
---  );
+create sequence lot_serial_number_seq start 1 increment 50;
+create table customer (id uuid not null, address varchar(255), father_name varchar(255), name varchar(255), phone_number varchar(255), primary key (id));
+create table loan (id int4 not null, date date, principal numeric(19, 2), primary key (id));
+create table location (id varchar(255) not null, chamber int4 not null, rack char(1) not null, slot int4 not null, primary key (id));
+create table lot (serial_number int4 not null, avg_weight_unit varchar(255), avg_weight_value float8, comments varchar(255), customer uuid, date timestamp, id uuid, is_palledari_paid boolean not null, number_of_bags int4 not null, number_of_empty_bags_given int4 not null, tot_weight_unit varchar(255), tot_weight_value float8, type varchar(255), loan_id int4, primary key (serial_number));
+create table lot_location (lot_serial_number int4 not null, location_location_id varchar(255) not null, location_lot_serial_number int4 not null, primary key (lot_serial_number, location_location_id, location_lot_serial_number));
+create table lot_locations (date date, location_id varchar(255) not null, lot_serial_number int4 not null, primary key (location_id, lot_serial_number));
+alter table lot_location add constraint UK_dak56yrp39pliuk1xy1rqbjoi unique (location_location_id, location_lot_serial_number);
+alter table lot add constraint FKqcitjlvd90f80mt7dol4gse24 foreign key (loan_id) references loan;
+alter table lot_location add constraint FK685djd4wbr5qqci156teairvr foreign key (location_location_id, location_lot_serial_number) references lot_locations;
+alter table lot_location add constraint FKr04te9tb53qtlfd2nf4hytdo1 foreign key (lot_serial_number) references lot;
+alter table lot_locations add constraint FKqpvre9wuaoba2rcssm42ds9hv foreign key (location_id) references location;
+alter table lot_locations add constraint FK5ej1bm1oph9q2aad8gg72y9qm foreign key (lot_serial_number) references lot;

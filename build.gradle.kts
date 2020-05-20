@@ -31,7 +31,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.5.3")
-//    implementation("org.flywaydb:flyway-core:6.1.3")
     implementation("org.postgresql:postgresql:42.2.9")
     implementation("org.projectlombok:lombok:1.18.12")
 
@@ -47,6 +46,7 @@ dependencies {
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
+    implementation("org.flywaydb:flyway-core:6.1.3")
 
 }
 
