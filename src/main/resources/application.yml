@@ -22,7 +22,7 @@ spring:
   application:
     name: wms-erp
   datasource:
-    url: jdbc:postgresql:lotdb
+    url: jdbc:postgresql:lotdb?currentSchema=lotdb
     driverClassName: org.postgresql.Driver
     username: ${erp_database_userName}
     password: ${erp_database_password}
@@ -42,7 +42,7 @@ spring:
   application:
     name: wms-erp
   datasource:
-    url: jdbc:postgresql:lotdb
+    url: jdbc:postgresql:lotdb?currentSchema=lotdb
     driverClassName: org.postgresql.Driver
     username: ${erp_database_userName}
     password: ${erp_database_password}
