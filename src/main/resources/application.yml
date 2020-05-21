@@ -24,8 +24,8 @@ spring:
   datasource:
     url: jdbc:postgresql:lotDb
     driverClassName: org.postgresql.Driver
-    username: ${database.driver.userName}
-    password: ${database.driver.password}
+    username: ${erp_database_userName}
+    password: ${erp_database_password}
   jpa:
     properties:
       hibernate:
@@ -42,8 +42,8 @@ spring:
   datasource:
     url: jdbc:postgresql:lotDb
     driverClassName: org.postgresql.Driver
-    username: ${database.driver.userName}
-    password: ${database.driver.password}
+    username: ${erp_database_userName}
+    password: ${erp_database_password}
   jpa:
     properties:
       hibernate:
