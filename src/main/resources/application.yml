@@ -22,12 +22,12 @@ spring:
   application:
     name: wms-erp
   datasource:
-    url: jdbc:postgresql:lotDb
+    url: jdbc:postgresql:lotdb
     driverClassName: org.postgresql.Driver
     username: ${erp_database_userName}
     password: ${erp_database_password}
   flyway:
-    schemas: lotDb
+    schemas: lotdb
   jpa:
     properties:
       hibernate:
@@ -42,12 +42,12 @@ spring:
   application:
     name: wms-erp
   datasource:
-    url: jdbc:postgresql:lotDb
+    url: jdbc:postgresql:lotdb
     driverClassName: org.postgresql.Driver
     username: ${erp_database_userName}
     password: ${erp_database_password}
   flyway:
-    schemas: lotDb
+    schemas: lotdb
   jpa:
     properties:
       hibernate:
