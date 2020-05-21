@@ -26,6 +26,8 @@ spring:
     driverClassName: org.postgresql.Driver
     username: ${erp_database_userName}
     password: ${erp_database_password}
+  flyway:
+    schemas: lotDb
   jpa:
     properties:
       hibernate:
@@ -44,6 +46,8 @@ spring:
     driverClassName: org.postgresql.Driver
     username: ${erp_database_userName}
     password: ${erp_database_password}
+  flyway:
+    schemas: lotDb
   jpa:
     properties:
       hibernate:
