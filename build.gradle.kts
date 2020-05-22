@@ -33,6 +33,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.5.3")
     implementation("org.postgresql:postgresql:42.2.9")
     implementation("org.projectlombok:lombok:1.18.12")
+    implementation("org.springframework.boot:spring-boot-starter-security")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
