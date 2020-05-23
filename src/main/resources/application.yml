@@ -13,8 +13,11 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
         ddl-auto=validate: true
+        ddl-auto: validate
 server:
   port: 8081
+jwt:
+  token: test
 
 ---
 spring:
@@ -35,10 +38,12 @@ spring:
         ddl-auto=validate: true
 server:
   port: 8081
+jwt:
+  token: ${erp_jwt_token}
 
 ---
 spring:
-  profiles: test
+  profiles: prod
   application:
     name: wms-erp
   datasource:
@@ -55,3 +60,5 @@ spring:
         ddl-auto=validate: true
 server:
   port: 8081
+jwt:
+  token: ${erp_jwt_token}

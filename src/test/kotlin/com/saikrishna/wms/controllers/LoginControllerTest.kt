@@ -21,27 +21,27 @@ internal class LoginControllerTest {
     fun shouldSetTheCookieIfTheLoginIsSuccessful() {
         every { loginService.login("username", "password") } returns "username"
 
-        val entity = LoginController(loginService)
+        val entity = LoginController(loginService, "saish_secret")
                 .login(LoginRequest("username", "password"), httpResponse)
 
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         val captor = slot<Cookie>()
         verify { httpResponse.addCookie(capture(captor)) }
 
-        assertThat(captor.captured.name).isEqualTo("user")
-        assertThat(captor.captured.value).isEqualTo("username")
+        assertThat(captor.captured.name).isEqualTo("token")
+        assertThat(captor.captured.value).isNotNull()
     }
 
     @Test
     fun shouldRemoveTheCookieWhenLogsOut() {
-        val entity = LoginController(loginService)
+        val entity = LoginController(loginService, "saish_secret")
                 .logOut(httpResponse)
 
         assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
         val captor = slot<Cookie>()
         verify { httpResponse.addCookie(capture(captor)) }
 
-        assertThat(captor.captured.name).isEqualTo("user")
+        assertThat(captor.captured.name).isEqualTo("token")
         assertThat(captor.captured.value).isNull()
     }
 }
