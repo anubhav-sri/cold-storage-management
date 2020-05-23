@@ -1,6 +1,7 @@
-package com.saikrishna.wms.controllers
+package com.saikrishna.wms.integrationTests
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.saikrishna.wms.controllers.CreateLotRequest
 import com.saikrishna.wms.models.Customer
 import com.saikrishna.wms.models.Location
 import com.saikrishna.wms.models.Weight

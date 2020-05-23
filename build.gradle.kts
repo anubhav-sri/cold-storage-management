@@ -48,6 +48,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
     implementation("org.flywaydb:flyway-core:6.1.3")
+    implementation("com.auth0:java-jwt:3.10.3")
 
 }
 
