@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
-import javax.servlet.http.Cookie
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,7 +35,7 @@ internal class LotIntegrationTest {
     private lateinit var locationRepo: LocationRepository
     @Autowired
     private lateinit var userRepository: UserRepository
-    private lateinit var authCookie: Cookie
+    private lateinit var authToken: String
     private val objectMapper: ObjectMapper = ObjectMapper()
 
     @Test
@@ -50,13 +49,13 @@ internal class LotIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lot")
                 .contentType(MediaType.APPLICATION_JSON)
-                .cookie(authCookie)
+                .header("auth", authToken)
                 .content(objectMapper.writeValueAsString(createLotRequest)))
                 .andExpect(status().isCreated)
                 .andExpect(jsonPath("$.lot.serialNumber", `is`(lotRepository.count().toInt())))
 
         mockMvc.perform(MockMvcRequestBuilders.get("/lot/" + lotRepository.count().toInt())
-                .cookie(authCookie))
+                .header("auth", authToken))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.lot.numberOfBags", `is`(12)))
                 .andExpect(jsonPath("$.customer.phoneNumber", `is`(customer.phoneNumber)))
@@ -75,12 +74,12 @@ internal class LotIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders
                 .multipart("/uploadLotData")
                 .file(MockMultipartFile("file", "dataFile.csv", null, this.javaClass.classLoader.getResourceAsStream("testFile.csv")))
-                .cookie(authCookie))
+                .header("auth", authToken))
                 .andExpect(status().isCreated)
                 .andExpect(content().string("Saved 8 number of lots"))
 
         mockMvc.perform(MockMvcRequestBuilders.get("/lot/" + lotRepository.count().toInt())
-                .cookie(authCookie))
+                .header("auth", authToken))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.lot.numberOfBags", `is`(50)))
                 .andExpect(jsonPath("$.customer.phoneNumber", `is`("8953143293")))
@@ -105,7 +104,7 @@ internal class LotIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lot")
                 .contentType(MediaType.APPLICATION_JSON)
-                .cookie(authCookie)
+                .header("auth", authToken)
                 .content(objectMapper.writeValueAsString(createLotRequest)))
                 .andExpect(status().isCreated)
                 .andExpect(jsonPath("$.lot.serialNumber", `is`(lotRepository.count().toInt())))
@@ -115,12 +114,12 @@ internal class LotIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders
                 .multipart("/updateLotLocation")
                 .file(MockMultipartFile("file", "dataFile.csv", null, this.javaClass.classLoader.getResourceAsStream("testFile_lot_location-multiple.csv")))
-                .cookie(authCookie))
+                .header("auth", authToken))
                 .andExpect(status().isCreated)
                 .andExpect(content().string("Update Locations for 3 number of lots"))
 
         mockMvc.perform(MockMvcRequestBuilders.get("/lot/1")
-                .cookie(authCookie))
+                .header("auth", authToken))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.lot.location").isArray)
                 .andExpect(jsonPath("$.lot.location.[*].id.locationId", containsInAnyOrder("1-A-24", "1-A-25")))
@@ -154,15 +153,15 @@ internal class LotIntegrationTest {
                 "KG", 10, true, "com")
 
         LoginRequest("username", "password")
-        val cookies = mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
+        val authToken = mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(LoginRequest("username", "password"))))
                 .andExpect(status().isOk)
-                .andReturn().response.cookies
+                .andReturn().response.contentAsString
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lot")
                 .contentType(MediaType.APPLICATION_JSON)
-                .cookie(cookies[0])
+                .header("auth", authToken)
                 .content(objectMapper.writeValueAsString(createLotRequest)))
                 .andExpect(status().isCreated)
 
@@ -172,18 +171,16 @@ internal class LotIntegrationTest {
     fun beforeEach() {
         userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password")))
 
-        authCookie = mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
+        authToken = mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(LoginRequest("username", "password"))))
                 .andExpect(status().isOk)
-                .andReturn().response.cookies[0]
+                .andReturn().response.contentAsString
     }
 
     @AfterEach
     fun afterEach() {
         userRepository.deleteAll()
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/logout"))
-                .andExpect(status().isOk)
     }
 }

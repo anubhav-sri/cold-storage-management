@@ -5,13 +5,11 @@ import com.saikrishna.wms.services.CsvLotParser
 import com.saikrishna.wms.services.LocationService
 import com.saikrishna.wms.services.LotService
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
+@CrossOrigin
 class LotLocationController(private val lotService: LotService,
                             private val csvLotParser: CsvLotParser,
                             private val locationService: LocationService) {

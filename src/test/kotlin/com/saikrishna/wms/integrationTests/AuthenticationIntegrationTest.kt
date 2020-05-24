@@ -37,11 +37,7 @@ internal class AuthenticationIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(MockMvcResultMatchers.content().string("username"))
-                .andExpect(MockMvcResultMatchers.cookie().exists("token"))
-                .andExpect(MockMvcResultMatchers.cookie().value("token",
-                        Matchers.notNullValue()))
-
+                .andExpect(MockMvcResultMatchers.content().string(Matchers.notNullValue()))
     }
 
     @Test
@@ -54,8 +50,8 @@ internal class AuthenticationIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized)
-                .andExpect(MockMvcResultMatchers.cookie().doesNotExist("token"))
                 .andExpect(MockMvcResultMatchers.status().reason("Wrong password"))
+                .andExpect(MockMvcResultMatchers.content().string(Matchers.emptyString()))
 
     }
 
@@ -71,25 +67,6 @@ internal class AuthenticationIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized)
                 .andExpect(MockMvcResultMatchers.cookie().doesNotExist("token"))
                 .andExpect(MockMvcResultMatchers.status().reason("Wrong username"))
-
-    }
-
-
-    @Test
-    fun shouldDeleteTheCookieWhileLogsOut() {
-        userRepository.save(User(username = "username_another", password = BCryptPasswordEncoder().encode("password")))
-        val loginRequest = LoginRequest("username_another", "password")
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/logout"))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(MockMvcResultMatchers.cookie().exists("token"))
-                .andExpect(MockMvcResultMatchers.cookie().maxAge("token", 0))
 
     }
 
