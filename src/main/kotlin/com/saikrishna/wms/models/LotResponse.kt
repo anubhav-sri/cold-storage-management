@@ -1,7 +1,5 @@
 package com.saikrishna.wms.models
 
-import com.saikrishna.wms.repositories.Lot
-
 
 class LotResponse(val customer: Customer, val lot: Lot){
     override fun equals(other: Any?): Boolean {

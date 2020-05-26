@@ -1,8 +1,8 @@
 package com.saikrishna.wms.services
 
 import com.saikrishna.wms.exceptions.FailedToParseCsvFileException
-import com.saikrishna.wms.models.CustomerLot
-import com.saikrishna.wms.models.LotLocationDTO
+import com.saikrishna.wms.models.dto.CustomerLot
+import com.saikrishna.wms.models.dto.LotLocationDTO
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

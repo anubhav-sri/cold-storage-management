@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.saikrishna.wms.exceptions.InvalidFileNameException
-import com.saikrishna.wms.models.CustomerLot
+import com.saikrishna.wms.models.dto.CustomerLot
 import com.saikrishna.wms.services.CsvLotParser
 import com.saikrishna.wms.services.CustomerService
 import com.saikrishna.wms.services.LotService
@@ -12,8 +12,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.springframework.mock.web.MockMultipartFile
-import java.nio.file.Files
-import java.nio.file.Path
 
 internal class BulkLotControllerTest {
     private val customerService: CustomerService = mock()

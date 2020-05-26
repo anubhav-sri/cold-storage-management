@@ -2,7 +2,7 @@ package com.saikrishna.wms.services
 
 import com.nhaarman.mockitokotlin2.*
 import com.saikrishna.wms.models.*
-import com.saikrishna.wms.repositories.Lot
+import com.saikrishna.wms.models.Lot
 import com.saikrishna.wms.repositories.LotLocationRepository
 import com.saikrishna.wms.repositories.LotRepository
 import org.assertj.core.api.Assertions.assertThat

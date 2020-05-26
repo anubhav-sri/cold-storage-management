@@ -2,7 +2,7 @@ package com.saikrishna.wms.controllers
 
 import com.saikrishna.wms.models.Customer
 import com.saikrishna.wms.models.Weight
-import com.saikrishna.wms.repositories.Lot
+import com.saikrishna.wms.models.Lot
 import java.time.LocalDateTime
 import java.util.*
 

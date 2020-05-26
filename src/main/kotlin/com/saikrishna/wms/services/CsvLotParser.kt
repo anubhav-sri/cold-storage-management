@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.MappingIterator
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import com.fasterxml.jackson.dataformat.csv.CsvSchema
 import com.saikrishna.wms.exceptions.FailedToParseCsvFileException
-import com.saikrishna.wms.models.CustomerLot
-import com.saikrishna.wms.models.LotLocationDTO
+import com.saikrishna.wms.models.dto.CustomerLot
+import com.saikrishna.wms.models.dto.LotLocationDTO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component

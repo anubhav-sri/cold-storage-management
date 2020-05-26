@@ -1,7 +1,6 @@
 package com.saikrishna.wms.models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.saikrishna.wms.repositories.Lot
 import java.time.LocalDate
 import javax.persistence.*
 

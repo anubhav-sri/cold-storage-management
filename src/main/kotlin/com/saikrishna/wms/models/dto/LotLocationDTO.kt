@@ -1,7 +1,10 @@
-package com.saikrishna.wms.models
+package com.saikrishna.wms.models.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.saikrishna.wms.repositories.Lot
+import com.saikrishna.wms.models.Location
+import com.saikrishna.wms.models.LotLocation
+import com.saikrishna.wms.models.LotLocationId
+import com.saikrishna.wms.models.Lot
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

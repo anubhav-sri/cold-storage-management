@@ -1,10 +1,12 @@
-package com.saikrishna.wms.models
+package com.saikrishna.wms.models.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.saikrishna.wms.repositories.Lot
+import com.saikrishna.wms.models.Customer
+import com.saikrishna.wms.models.Loan
+import com.saikrishna.wms.models.Weight
+import com.saikrishna.wms.models.Lot
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 

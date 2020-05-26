@@ -4,8 +4,8 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.saikrishna.wms.models.Location
-import com.saikrishna.wms.models.LotLocationDTO
-import com.saikrishna.wms.repositories.Lot
+import com.saikrishna.wms.models.dto.LotLocationDTO
+import com.saikrishna.wms.models.Lot
 import com.saikrishna.wms.services.CsvLotParser
 import com.saikrishna.wms.services.LocationService
 import com.saikrishna.wms.services.LotService

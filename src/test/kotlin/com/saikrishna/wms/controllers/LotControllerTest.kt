@@ -3,7 +3,7 @@ package com.saikrishna.wms.controllers
 import com.saikrishna.wms.models.Customer
 import com.saikrishna.wms.models.LotResponse
 import com.saikrishna.wms.models.Weight
-import com.saikrishna.wms.repositories.Lot
+import com.saikrishna.wms.models.Lot
 import com.saikrishna.wms.services.CustomerService
 import com.saikrishna.wms.services.LotService
 import io.mockk.every
@@ -11,7 +11,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentCaptor
 import java.time.LocalDateTime
 import java.util.*
 
@@ -73,7 +72,7 @@ internal class LotControllerTest {
         val customer = Customer(name = "name", fatherName = "fname", address = "", phoneNumber = "1212")
 
         val date = LocalDateTime.parse("2020-01-16T19:02:42.531")
-        val lot = Lot(lotId, date,12, averageWeight, totalWeight,
+        val lot = Lot(lotId, date, 12, averageWeight, totalWeight,
                 customer.id, type = "G4", serialNumber = 1)
         val expectedLotResponse = LotResponse(customer,
                 lot)

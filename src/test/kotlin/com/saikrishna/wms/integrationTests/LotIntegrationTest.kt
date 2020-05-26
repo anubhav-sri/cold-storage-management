@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.saikrishna.wms.controllers.CreateLotRequest
 import com.saikrishna.wms.models.*
 import com.saikrishna.wms.repositories.LocationRepository
-import com.saikrishna.wms.repositories.Lot
+import com.saikrishna.wms.models.Lot
 import com.saikrishna.wms.repositories.LotRepository
 import com.saikrishna.wms.repositories.UserRepository
 import org.hamcrest.Matchers.containsInAnyOrder

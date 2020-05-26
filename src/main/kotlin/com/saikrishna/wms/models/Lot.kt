@@ -1,7 +1,5 @@
-package com.saikrishna.wms.repositories
+package com.saikrishna.wms.models
 
-import com.saikrishna.wms.models.*
-import lombok.Getter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
