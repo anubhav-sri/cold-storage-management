@@ -3,6 +3,7 @@ package com.saikrishna.wms.models
 import java.math.BigDecimal
 import java.time.LocalDate
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
 @Entity
