@@ -1,18 +1,22 @@
 package com.saikrishna.wms.models
 
+import lombok.Builder
+import lombok.Getter
 import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
-class Clearance(
+@Builder
+@Getter
+data class Clearance(
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE,
                 generator = "clearance_id_seq")
-        private val id: Int? = null,
+        val id: Int? = null,
         @ManyToOne
-        private val lot: Lot,
-        private val numberOfBags: Int,
-        private val date: LocalDate) {
+        val lot: Lot,
+        val numberOfBags: Int,
+        val date: LocalDate) {
 
     constructor(lot: Lot, numberOfBags: Int,
                 date: LocalDate) : this(id = null, lot = lot, numberOfBags = numberOfBags,
