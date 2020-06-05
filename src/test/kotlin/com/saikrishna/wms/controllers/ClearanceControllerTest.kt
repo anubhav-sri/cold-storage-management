@@ -1,5 +1,6 @@
 package com.saikrishna.wms.controllers
 
+import com.nhaarman.mockitokotlin2.refEq
 import com.saikrishna.wms.exceptions.LotNotFoundException
 import com.saikrishna.wms.models.Clearance
 import com.saikrishna.wms.models.Lot
@@ -13,6 +14,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 internal class ClearanceControllerTest {
@@ -23,11 +25,11 @@ internal class ClearanceControllerTest {
     @Test
     fun `should add a clearance for a lot`() {
         val lot = Lot(serialNumber = 1)
-        val date = LocalDate.now()
+        val date = LocalDate.parse("20-09-2020", DateTimeFormatter.ofPattern("dd-MM-yyyy"))
         val clearanceDto = ClearanceDto(lotNumber = 1,
-                numberOfBags = 1, date = date)
+                numberOfBags = 1, date = "20-09-2020")
         val expectedClearance = Clearance(lot = lot, numberOfBags = 1, date = date)
-        val expectedSavedClearance = ClearanceDto(id = 1, lotNumber = 1, numberOfBags = 1, date = date)
+        val expectedSavedClearance = ClearanceDto(id = 1, lotNumber = 1, numberOfBags = 1, date = "20-09-2020")
 
         every { lotService.findByLotNumber(1) } returns Optional.of(lot)
         every { clearanceService.saveClearance(expectedClearance) } returns Clearance(id = 1, lot = lot, numberOfBags = 1, date = date)
@@ -42,7 +44,7 @@ internal class ClearanceControllerTest {
     @Test
     fun `should throw lot not found exception of lot is not present`() {
         val clearanceDto = ClearanceDto(lotNumber = 1,
-                numberOfBags = 1, date = LocalDate.now())
+                numberOfBags = 1, date = "20-09-2020")
 
         every { lotService.findByLotNumber(1) } returns Optional.empty()
 

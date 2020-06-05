@@ -17,6 +17,7 @@ internal class ClearanceServiceTest {
     @Test
     fun shouldSaveTheClearanceForALot() {
         val clearance = Clearance(Lot(numberOfBags = 24), 23, LocalDate.now())
+        every { clearanceRepository.findAllByLot(clearance.lot) } returns listOf()
         every { clearanceRepository.save(clearance) } returns clearance
         ClearanceService(clearanceRepository).saveClearance(clearance);
         verify { clearanceRepository.save(clearance) }
