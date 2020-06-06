@@ -1,5 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+//buildscript {
+//    dependencies {
+//        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
+//    }
+//}
+//
+//apply plugin: "kotlin-jpa"
 plugins {
     id("application")
     id("org.springframework.boot") version "2.2.0.RELEASE"
@@ -8,6 +15,7 @@ plugins {
     kotlin("plugin.spring") version "1.3.50"
     kotlin("plugin.allopen") version "1.3.61"
     kotlin("kapt") version "1.3.61"
+    kotlin("plugin.jpa") version "1.3.61"
 }
 
 allOpen {

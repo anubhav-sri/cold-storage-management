@@ -7,6 +7,7 @@ import com.saikrishna.wms.models.LoginRequest
 import com.saikrishna.wms.models.User
 import com.saikrishna.wms.models.Weight
 import com.saikrishna.wms.models.dto.ClearanceDto
+import com.saikrishna.wms.repositories.ClearanceRepository
 import com.saikrishna.wms.repositories.LotRepository
 import com.saikrishna.wms.repositories.UserRepository
 import org.junit.jupiter.api.*
@@ -31,6 +32,8 @@ internal class ClearanceIntegrationTest {
     @Autowired
     private lateinit var lotRepository: LotRepository
     @Autowired
+    private lateinit var clearanceRepository: ClearanceRepository
+    @Autowired
     private lateinit var userRepository: UserRepository
     private lateinit var authToken: String
     private val objectMapper: ObjectMapper = ObjectMapper()
@@ -53,6 +56,38 @@ internal class ClearanceIntegrationTest {
                 .andExpect(status().isOk)
     }
 
+    @Test
+    fun `should get clearances for a lot`() {
+        val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
+        val customer = Customer(UUID.randomUUID(), "", "fname", "", "9159989867")
+        val createLotRequest = CreateLotRequest(customer, "2020-01-16T19:02:42.531",
+                12, averageWeight.value, "G4",
+                "KG", 10, true, "com")
+
+        val savedLot = lotRepository.save(createLotRequest.toLotDto(customer.id))
+        val clearanceDto = ClearanceDto(lotNumber = savedLot.serialNumber, numberOfBags = 10, date = "20-09-2020")
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/clearance")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("auth", authToken)
+                .content(objectMapper.writeValueAsString(clearanceDto)))
+                .andExpect(status().isOk)
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/clearance")
+                .param("lotNumber", "1")
+                .header("auth", authToken)
+                .content(objectMapper.writeValueAsString(clearanceDto)))
+                .andExpect(status().isOk)
+    }
+
+    @Test
+    fun `should return 404 if lot not found`() {
+        mockMvc.perform(MockMvcRequestBuilders.get("/clearance")
+                .param("lotNumber", "1")
+                .header("auth", authToken))
+                .andExpect(status().isNotFound)
+    }
+
     @BeforeEach
     fun beforeEach() {
         userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password")))
@@ -67,6 +102,7 @@ internal class ClearanceIntegrationTest {
     @AfterEach
     fun afterEach() {
         userRepository.deleteAll()
+        clearanceRepository.deleteAll()
 
     }
 }

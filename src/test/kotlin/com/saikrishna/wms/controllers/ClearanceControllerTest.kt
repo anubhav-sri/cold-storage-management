@@ -42,6 +42,22 @@ internal class ClearanceControllerTest {
     }
 
     @Test
+    fun `should get all clearances for a lot`() {
+        val lot = Lot(serialNumber = 1)
+        val date = LocalDate.parse("20-09-2020", DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+        val expectedSavedClearance = ClearanceDto(id = 1, lotNumber = 1, numberOfBags = 1, date = "20-09-2020")
+
+        every { lotService.findByLotNumber(1) } returns Optional.of(lot)
+        every { clearanceService.findAllForLot(lot) } returns listOf(Clearance(id = 1, lot = lot, numberOfBags = 1, date = date))
+
+        val savedClearances = ClearanceController(clearanceService, lotService)
+                .findAllClearanceForLot(lot.serialNumber)
+
+        assertThat(savedClearances).containsOnly(expectedSavedClearance)
+        verify { clearanceService.findAllForLot(lot) }
+    }
+
+    @Test
     fun `should throw lot not found exception of lot is not present`() {
         val clearanceDto = ClearanceDto(lotNumber = 1,
                 numberOfBags = 1, date = "20-09-2020")
