@@ -7,6 +7,7 @@ import com.saikrishna.wms.repositories.ClearanceRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -21,6 +22,16 @@ internal class ClearanceServiceTest {
         every { clearanceRepository.save(clearance) } returns clearance
         ClearanceService(clearanceRepository).saveClearance(clearance);
         verify { clearanceRepository.save(clearance) }
+    }
+
+    @Test
+    fun shouldGetAllClearanceForALot() {
+        val clearance = Clearance(Lot(numberOfBags = 24), 23, LocalDate.now())
+        every { clearanceRepository.findAllByLot(clearance.lot) } returns listOf(clearance)
+        val clearances: List<Clearance> = ClearanceService(clearanceRepository)
+                .findAllForLot(clearance.lot)
+        assertThat(clearances).containsExactly(clearance)
+        verify { clearanceRepository.findAllByLot(clearance.lot) }
     }
 
     @Test

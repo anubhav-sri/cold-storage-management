@@ -2,6 +2,7 @@ package com.saikrishna.wms.services
 
 import com.saikrishna.wms.exceptions.ClearanceNotAllowedException
 import com.saikrishna.wms.models.Clearance
+import com.saikrishna.wms.models.Lot
 import com.saikrishna.wms.repositories.ClearanceRepository
 import org.springframework.stereotype.Service
 
@@ -16,5 +17,9 @@ class ClearanceService(private val clearanceRepository: ClearanceRepository) {
         }
 
         return clearanceRepository.save(clearance)
+    }
+
+    fun findAllForLot(lot: Lot): List<Clearance> {
+        return clearanceRepository.findAllByLot(lot)
     }
 }
