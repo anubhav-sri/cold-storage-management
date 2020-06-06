@@ -103,6 +103,7 @@ internal class ClearanceIntegrationTest {
     fun afterEach() {
         userRepository.deleteAll()
         clearanceRepository.deleteAll()
+        lotRepository.deleteAll()
 
     }
 }
