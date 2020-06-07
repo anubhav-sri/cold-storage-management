@@ -83,7 +83,7 @@ internal class ClearanceIntegrationTest {
     @Test
     fun `should return 404 if lot not found`() {
         mockMvc.perform(MockMvcRequestBuilders.get("/clearance")
-                .param("lotNumber", "1000")
+                .param("lotNumber", lotRepository.count().and(1).toString())
                 .header("auth", authToken))
                 .andExpect(status().isNotFound)
     }
@@ -103,7 +103,5 @@ internal class ClearanceIntegrationTest {
     fun afterEach() {
         userRepository.deleteAll()
         clearanceRepository.deleteAll()
-        lotRepository.deleteAll()
-
     }
 }
