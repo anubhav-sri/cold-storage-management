@@ -1,5 +1,6 @@
 package com.saikrishna.wms.services
 
+import com.saikrishna.wms.exceptions.LotNotFoundException
 import com.saikrishna.wms.models.LotLocation
 import com.saikrishna.wms.models.Weight
 import com.saikrishna.wms.models.Lot

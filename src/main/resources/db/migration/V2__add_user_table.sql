@@ -8,5 +8,5 @@ create table app_user
     unique (username)
 );
 
--- insert into app_user (id, username, password)
--- values (2, 'username_t', '$2y$12$jmgcjmo.CK5iYXYLfYW0S.Q24ad19h9vCPaKW0iIjZgE4XPunFCzG')
+insert into app_user (id, username, password)
+values (2, 'username_t', '$2y$12$jmgcjmo.CK5iYXYLfYW0S.Q24ad19h9vCPaKW0iIjZgE4XPunFCzG')
