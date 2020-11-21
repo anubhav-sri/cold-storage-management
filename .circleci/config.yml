@@ -57,10 +57,10 @@ jobs:
             - "db:89:62:b0:a2:77:d9:1e:8e:40:a7:bf:fe:c7:d5:bb"
       - attach_workspace:
           at: /tmp/build/libs
-      - run:
-          name: Deploy in test environment
-          command: |
-            scp -vv /tmp/build/libs/wms-0.0.1-SNAPSHOT.jar $SSH_USER@$SSH_HOST:~/
+#       - run:
+#           name: Deploy in test environment
+#           command: |
+#             scp -vv /tmp/build/libs/wms-0.0.1-SNAPSHOT.jar $SSH_USER@$SSH_HOST:~/
       - run:
           name: Deploy in Prod environment
           command: |
