@@ -55,6 +55,7 @@ jobs:
           fingerprints:
             - "ec:83:82:5a:57:f3:24:7f:e1:6f:73:55:16:e7:e8:35"
             - "11:1b:e5:06:30:d3:de:8e:af:10:ae:a9:b0:f5:31:1f"
+            - "e8:0f:10:dd:65:69:7e:16:30:c2:30:50:9b:0b:47:09"
       - attach_workspace:
           at: /tmp/build/libs
 #       - run:
