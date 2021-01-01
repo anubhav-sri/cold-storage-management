@@ -44,7 +44,7 @@ internal class CsvLotParserTest {
         val file = MockMultipartFile("newData.csv", resourceAsStream)
         val parseCsvToLotLocation = csvLotParser.parseCsvToLotLocation(file)
 
-        val expectedLotLocation = LotLocationDTO(1, "25-02-2020", "1-A-24")
+        val expectedLotLocation = LotLocationDTO(1, "25-02-2020", 1,'A',34)
         assertThat(parseCsvToLotLocation.size).isEqualTo(1)
         val parsedRow = parseCsvToLotLocation[0]
         assertThat(parsedRow).isEqualToIgnoringGivenFields(expectedLotLocation)

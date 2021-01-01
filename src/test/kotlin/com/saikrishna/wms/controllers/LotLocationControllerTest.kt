@@ -24,14 +24,14 @@ internal class LotLocationControllerTest {
         val lotLocationController = LotLocationController(lotService, csvLotParser, locationService)
         val file = MockMultipartFile("file", "newData.csv", null, this.javaClass.classLoader.getResourceAsStream("testFile.csv"))
 
-        val locationOfLotInFile = LotLocationDTO(1, "25-02-2020", "A-12-43")
+        val locationOfLotInFile = LotLocationDTO(1, "25-02-2020", 1,'A',43)
         val lotLocations = listOf(locationOfLotInFile)
 
         given(csvLotParser.parseCsvToLotLocation(file)).willReturn(lotLocations)
         val lot: Lot = mock()
-        val location: Location = mock()
+        val location = Location("1-A-43",1,'A',3)
         given(lotService.findByLotNumber(1)).willReturn(Optional.of(lot))
-        given(locationService.findById("A-12-43")).willReturn(location)
+        given(locationService.findById("1-A-43")).willReturn(location)
         given(lotService.updateLocations(any())).willReturn(listOf(lot))
 
         val response = lotLocationController.loadLotLocations(file)

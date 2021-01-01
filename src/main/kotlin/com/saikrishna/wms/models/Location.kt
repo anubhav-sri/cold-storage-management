@@ -6,8 +6,8 @@ import javax.persistence.Id
 
 @Entity
 data class Location(
-        @Id
+		@Id
         val id: String = "",
-        val chamber: Int = 0,
-        val rack: Char = 'A',
-        val slot: Int = 3)
+		val chamber: Int = 0,
+		val floor: Char = 'A',
+		val rack: Int = 3)

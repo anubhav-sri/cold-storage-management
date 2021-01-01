@@ -24,7 +24,7 @@ class LotLocationController(private val lotService: LotService,
 
         lotService.updateLocations(lotLocations.map { lotLocationDTO ->
             lotLocationDTO.toLotLocation(lotService.findByLotNumber(lotLocationDTO.lotNumber).orElseThrow(),
-                    locationService.findById(lotLocationDTO.locationVal))
+                    locationService.findById(String.format("%s-%s-%s", lotLocationDTO.chamber, lotLocationDTO.floor, lotLocationDTO.rack)))
 
         })
         return "Update Locations for ${lotLocations.size} number of lots"

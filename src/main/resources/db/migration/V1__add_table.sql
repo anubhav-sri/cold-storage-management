@@ -1,7 +1,7 @@
 create sequence lot_serial_number_seq start 1 increment 50;
 create table customer (id uuid not null, address varchar(255), father_name varchar(255), name varchar(255), phone_number varchar(255), primary key (id));
 create table loan (id int4 not null, date date, principal numeric(19, 2), primary key (id));
-create table location (id varchar(255) not null, chamber int4 not null, rack char(1) not null, slot int4 not null, primary key (id));
+create table location (id varchar(255) not null, chamber int4 not null, floor char(1) not null, rack int4 not null, primary key (id));
 create table lot (serial_number int4 not null, avg_weight_unit varchar(255), avg_weight_value float8, comments varchar(255), customer uuid, date timestamp, id uuid, is_palledari_paid boolean not null, number_of_bags int4 not null, number_of_empty_bags_given int4 not null, tot_weight_unit varchar(255), tot_weight_value float8, type varchar(255), loan_id int4, primary key (serial_number));
 create table lot_location (lot_serial_number int4 not null, location_location_id varchar(255) not null, location_lot_serial_number int4 not null, primary key (lot_serial_number, location_location_id, location_lot_serial_number));
 create table lot_locations (date date, location_id varchar(255) not null, lot_serial_number int4 not null, primary key (location_id, lot_serial_number));
