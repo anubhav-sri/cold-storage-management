@@ -10,4 +10,4 @@ data class Customer(
         val name: String = "",
         val fatherName: String = "",
         val address: String = "",
-        val phoneNumber: String = "")
+        val phoneNumber: String = "") : Cust
