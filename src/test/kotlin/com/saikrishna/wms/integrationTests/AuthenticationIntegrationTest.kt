@@ -1,5 +1,7 @@
 package com.saikrishna.wms.integrationTests
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.saikrishna.wms.models.LoginRequest
 import com.saikrishna.wms.models.User
@@ -15,63 +17,78 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import java.util.*
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 internal class AuthenticationIntegrationTest {
 
-    @Autowired
-    private lateinit var mockMvc: MockMvc
-    @Autowired
-    private lateinit var userRepository: UserRepository
-    private val objectMapper: ObjectMapper = ObjectMapper()
+	@Autowired
+	private lateinit var mockMvc: MockMvc
 
-    @Test
-    fun shouldBeAbleToAuthenticateTheUser() {
+	@Autowired
+	private lateinit var userRepository: UserRepository
+	private val objectMapper: ObjectMapper = ObjectMapper()
 
-        userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password")))
-        val loginRequest = LoginRequest("username", "password")
+	@Test
+	fun shouldBeAbleToAuthenticateTheUser() {
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(MockMvcResultMatchers.content().string(Matchers.notNullValue()))
-    }
+		userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password")))
+		val loginRequest = LoginRequest("username", "password")
 
-    @Test
-    fun shouldRespondWithHttp401IfPasswordIsWrong() {
+		mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(loginRequest)))
+				.andExpect(MockMvcResultMatchers.status().isOk)
+				.andExpect(MockMvcResultMatchers.content().string(Matchers.notNullValue()))
+	}
 
-        userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password")))
-        val loginRequest = LoginRequest("username", "wrong_password")
+	@Test
+	fun shouldRespondWithHttp401IfPasswordIsWrong() {
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized)
-                .andExpect(MockMvcResultMatchers.status().reason("Wrong password"))
-                .andExpect(MockMvcResultMatchers.content().string(Matchers.emptyString()))
+		userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password")))
+		val loginRequest = LoginRequest("username", "wrong_password")
 
-    }
+		mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(loginRequest)))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized)
+				.andExpect(MockMvcResultMatchers.status().reason("Wrong password"))
+				.andExpect(MockMvcResultMatchers.content().string(Matchers.emptyString()))
 
-    @Test
-    fun shouldRespondWithHttp401IfUsernameIsWrong() {
+	}
 
-        userRepository.save(User(username = "another_username", password = BCryptPasswordEncoder().encode("password")))
-        val loginRequest = LoginRequest("wrong_username", "wrong_password")
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized)
-                .andExpect(MockMvcResultMatchers.cookie().doesNotExist("token"))
-                .andExpect(MockMvcResultMatchers.status().reason("Wrong username"))
+	@Test
+	fun shouldRespondWithHttp403IfTokenMissing() {
+		val loginRequest = LoginRequest("wrong_username", "wrong_password")
 
-    }
+		mockMvc.perform(MockMvcRequestBuilders.post("/lot")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(loginRequest)))
+				.andExpect(MockMvcResultMatchers.status().isForbidden)
 
-    @AfterEach
-    fun tearDown() {
-        userRepository.deleteAll()
-    }
+	}
+
+	@Test
+	fun shouldRespondWithHttp403IfTokenExpired() {
+		val loginRequest = LoginRequest("wrong_username", "wrong_password")
+		val token = JWT.create()
+				.withSubject("username+t")
+				.withExpiresAt(Date(System.currentTimeMillis()))
+				.sign(Algorithm.HMAC512("test".toByteArray()))
+
+		mockMvc.perform(MockMvcRequestBuilders.post("/lot")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("token", token)
+				.content(objectMapper.writeValueAsString(loginRequest)))
+				.andExpect(MockMvcResultMatchers.status().isForbidden)
+
+	}
+
+	@AfterEach
+	fun tearDown() {
+		userRepository.deleteAll()
+	}
 }
