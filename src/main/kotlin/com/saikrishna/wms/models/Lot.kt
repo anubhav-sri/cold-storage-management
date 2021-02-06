@@ -25,8 +25,8 @@ data class Lot(
         val isPalledariPaid: Boolean = false,
         val comments: String = "",
         @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE,
-                generator = "lot_serial_number_seq")
+		@SequenceGenerator(name="lot_serial_number_seq",sequenceName="lot_serial_number_seq", allocationSize = 1)
+		@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="lot_serial_number_seq")
         var serialNumber: Int = 0
 ) {
 
