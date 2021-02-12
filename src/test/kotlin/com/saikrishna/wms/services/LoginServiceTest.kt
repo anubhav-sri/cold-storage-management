@@ -2,6 +2,7 @@ package com.saikrishna.wms.services
 
 import com.saikrishna.wms.exceptions.InvalidPasswordException
 import com.saikrishna.wms.exceptions.UserNotFoundException
+import com.saikrishna.wms.models.Role
 import com.saikrishna.wms.models.User
 import com.saikrishna.wms.repositories.UserRepository
 import io.mockk.every
@@ -20,10 +21,11 @@ internal class LoginServiceTest {
 
     @Test
     fun shouldBeAbleToLoginWithCorrectUsernameAndPasswordUsingPasswordEncoder() {
-        every { userRepository.findByUsername("username") } returns User(1, "username", passwordEncoder.encode("password"))
+        every { userRepository.findByUsername("username") } returns User(1, "username", passwordEncoder.encode("password"), Role.OPERATOR)
         val loggedInUser = loginService.login("username", "password")
 
-        assertThat(loggedInUser).isEqualTo("username");
+        assertThat(loggedInUser.username).isEqualTo("username")
+        assertThat(loggedInUser.role).isEqualTo(Role.OPERATOR)
     }
 
     @Test
@@ -38,7 +40,7 @@ internal class LoginServiceTest {
     fun shouldThrowInvalidPasswordExceptionIfPasswordIsWrong() {
         every { userRepository.findByUsername("username") } returns User(1,
                 "username",
-                "wrongpassword")
+                "wrongpassword", Role.ADMIN)
 
         Assertions.assertThrows(InvalidPasswordException::class.java
         ) { loginService.login("username", "password") }

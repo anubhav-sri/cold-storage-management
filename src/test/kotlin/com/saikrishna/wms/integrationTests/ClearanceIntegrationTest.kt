@@ -1,11 +1,9 @@
 package com.saikrishna.wms.integrationTests
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.gson.Gson
 import com.saikrishna.wms.controllers.CreateLotRequest
-import com.saikrishna.wms.models.Customer
-import com.saikrishna.wms.models.LoginRequest
-import com.saikrishna.wms.models.User
-import com.saikrishna.wms.models.Weight
+import com.saikrishna.wms.models.*
 import com.saikrishna.wms.models.dto.ClearanceDto
 import com.saikrishna.wms.repositories.ClearanceRepository
 import com.saikrishna.wms.repositories.LotRepository
@@ -27,81 +25,85 @@ import java.util.*
 @AutoConfigureMockMvc
 internal class ClearanceIntegrationTest {
 
-    @Autowired
-    private lateinit var mockMvc: MockMvc
-    @Autowired
-    private lateinit var lotRepository: LotRepository
-    @Autowired
-    private lateinit var clearanceRepository: ClearanceRepository
-    @Autowired
-    private lateinit var userRepository: UserRepository
-    private lateinit var authToken: String
-    private val objectMapper: ObjectMapper = ObjectMapper()
+	@Autowired
+	private lateinit var mockMvc: MockMvc
 
-    @Test
-    fun `should add clearance`() {
-        val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
-        val customer = Customer(UUID.randomUUID(), "", "fname", "", "9159989867")
-        val createLotRequest = CreateLotRequest(customer, "2020-01-16T19:02:42.531",
-                12, averageWeight.value, "G4",
-                "KG", 10, true, "com")
+	@Autowired
+	private lateinit var lotRepository: LotRepository
 
-        val savedLot = lotRepository.save(createLotRequest.toLotDto(customer.id))
-        val clearanceDto = ClearanceDto(lotNumber = savedLot.serialNumber, numberOfBags = 10, date = "20-09-2020")
+	@Autowired
+	private lateinit var clearanceRepository: ClearanceRepository
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/clearance")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("auth", authToken)
-                .content(objectMapper.writeValueAsString(clearanceDto)))
-                .andExpect(status().isOk)
-    }
+	@Autowired
+	private lateinit var userRepository: UserRepository
+	private lateinit var authToken: String
+	private val objectMapper: ObjectMapper = ObjectMapper()
 
-    @Test
-    fun `should get clearances for a lot`() {
-        val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
-        val customer = Customer(UUID.randomUUID(), "", "fname", "", "9159989867")
-        val createLotRequest = CreateLotRequest(customer, "2020-01-16T19:02:42.531",
-                12, averageWeight.value, "G4",
-                "KG", 10, true, "com")
+	@Test
+	fun `should add clearance`() {
+		val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
+		val customer = Customer(UUID.randomUUID(), "", "fname", "", "9159989867")
+		val createLotRequest = CreateLotRequest(customer, "2020-01-16T19:02:42.531",
+				12, averageWeight.value, "G4",
+				"KG", 10, true, "com")
 
-        val savedLot = lotRepository.save(createLotRequest.toLotDto(customer.id))
-        val clearanceDto = ClearanceDto(lotNumber = savedLot.serialNumber, numberOfBags = 10, date = "20-09-2020")
+		val savedLot = lotRepository.save(createLotRequest.toLotDto(customer.id))
+		val clearanceDto = ClearanceDto(lotNumber = savedLot.serialNumber, numberOfBags = 10, date = "20-09-2020")
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/clearance")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("auth", authToken)
-                .content(objectMapper.writeValueAsString(clearanceDto)))
-                .andExpect(status().isOk)
+		mockMvc.perform(MockMvcRequestBuilders.post("/clearance")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("auth", authToken)
+				.content(objectMapper.writeValueAsString(clearanceDto)))
+				.andExpect(status().isOk)
+	}
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/clearance")
-                .param("lotNumber", "1")
-                .header("auth", authToken)
-                .content(objectMapper.writeValueAsString(clearanceDto)))
-                .andExpect(status().isOk)
-    }
+	@Test
+	fun `should get clearances for a lot`() {
+		val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
+		val customer = Customer(UUID.randomUUID(), "", "fname", "", "9159989867")
+		val createLotRequest = CreateLotRequest(customer, "2020-01-16T19:02:42.531",
+				12, averageWeight.value, "G4",
+				"KG", 10, true, "com")
 
-    @Test
-    fun `should return 404 if lot not found`() {
-        mockMvc.perform(MockMvcRequestBuilders.get("/clearance")
-                .param("lotNumber", lotRepository.count().plus(1).toString())
-                .header("auth", authToken))
-                .andExpect(status().isNotFound)
-    }
+		val savedLot = lotRepository.save(createLotRequest.toLotDto(customer.id))
+		val clearanceDto = ClearanceDto(lotNumber = savedLot.serialNumber, numberOfBags = 10, date = "20-09-2020")
 
-    @BeforeEach
-    fun beforeEach() {
-        userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password")))
+		mockMvc.perform(MockMvcRequestBuilders.post("/clearance")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("auth", authToken)
+				.content(objectMapper.writeValueAsString(clearanceDto)))
+				.andExpect(status().isOk)
 
-        authToken = mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(LoginRequest("username", "password"))))
-                .andExpect(status().isOk)
-                .andReturn().response.contentAsString
-    }
+		mockMvc.perform(MockMvcRequestBuilders.get("/clearance")
+				.param("lotNumber", "1")
+				.header("auth", authToken)
+				.content(objectMapper.writeValueAsString(clearanceDto)))
+				.andExpect(status().isOk)
+	}
 
-    @AfterEach
-    fun afterEach() {
-        userRepository.deleteAll()
-        clearanceRepository.deleteAll()
-    }
+	@Test
+	fun `should return 404 if lot not found`() {
+		mockMvc.perform(MockMvcRequestBuilders.get("/clearance")
+				.param("lotNumber", lotRepository.count().plus(1).toString())
+				.header("auth", authToken))
+				.andExpect(status().isNotFound)
+	}
+
+	@BeforeEach
+	fun beforeEach() {
+		userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password"), role = Role.ADMIN))
+
+		authToken = Gson().fromJson<LoginResponse>(mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(LoginRequest("username", "password"))))
+				.andExpect(status().isOk)
+				.andReturn().response.contentAsString, LoginResponse::class.java).token
+
+	}
+
+	@AfterEach
+	fun afterEach() {
+		userRepository.deleteAll()
+		clearanceRepository.deleteAll()
+	}
 }

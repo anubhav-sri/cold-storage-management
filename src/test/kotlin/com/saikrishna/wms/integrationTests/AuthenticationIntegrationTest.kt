@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.saikrishna.wms.models.LoginRequest
+import com.saikrishna.wms.models.Role
 import com.saikrishna.wms.models.User
 import com.saikrishna.wms.repositories.UserRepository
 import org.hamcrest.Matchers
@@ -34,7 +35,7 @@ internal class AuthenticationIntegrationTest {
 	@Test
 	fun shouldBeAbleToAuthenticateTheUser() {
 
-		userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password")))
+		userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password"), role = Role.OPERATOR))
 		val loginRequest = LoginRequest("username", "password")
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
@@ -47,7 +48,7 @@ internal class AuthenticationIntegrationTest {
 	@Test
 	fun shouldRespondWithHttp401IfPasswordIsWrong() {
 
-		userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password")))
+		userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password"), role = Role.ADMIN))
 		val loginRequest = LoginRequest("username", "wrong_password")
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")

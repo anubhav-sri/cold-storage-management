@@ -11,4 +11,6 @@ data class User(
         val id: Int? = null,
         @Column(nullable = false, unique = true)
         val username: String = "",
-        val password: String = "")
+        val password: String = "",
+		@Enumerated(EnumType.STRING)
+        val role: Role)
