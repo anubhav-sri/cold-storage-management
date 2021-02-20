@@ -171,6 +171,30 @@ internal class LotIntegrationTest {
 
 	}
 
+	@Test
+	@Order(6)
+	fun `should be able to get total lots`() {
+		lotRepository.deleteAll()
+		val averageWeight = Weight(12.0, Weight.WeightUnit.KG)
+		val customer = Customer(UUID.randomUUID(), "", "fname", "", "9159989867")
+		val createLotRequest = CreateLotRequest(customer, "2020-01-16T19:02:42.531",
+				12, averageWeight.value, "G4",
+				"KG", 10, true, "com")
+
+		mockMvc.perform(MockMvcRequestBuilders.post("/lot")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("auth", authToken)
+				.content(objectMapper.writeValueAsString(createLotRequest)))
+				.andExpect(status().isCreated)
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/lot/count")
+				.contentType(MediaType.APPLICATION_JSON)
+				.header("auth", authToken))
+				.andExpect(status().isOk)
+				.andExpect(content().string("1"))
+
+	}
+
 	@BeforeEach
 	fun beforeEach() {
 		userRepository.save(User(username = "username", password = BCryptPasswordEncoder().encode("password"), role = Role.OPERATOR))

@@ -40,4 +40,9 @@ class LotController(@Autowired private val lotService: LotService,
 		val saveLot = lotService.saveLot(lotRequest.toLotDto(saveCustomer.id))
 		return ResponseEntity.ok().body(LotResponse(saveCustomer, saveLot))
 	}
+
+	@GetMapping("/lot/count", produces = ["application/json"])
+	fun getTotalLots(): ResponseEntity<Long> {
+		return ResponseEntity.ok().body(lotService.getTotalLot())
+	}
 }

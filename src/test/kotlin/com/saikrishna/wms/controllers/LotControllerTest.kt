@@ -132,4 +132,18 @@ internal class LotControllerTest {
 
 
 	}
+
+	@Test
+	fun shouldBeAbleToGetTotalLot() {
+		val lotController = LotController(lotService, customerService)
+
+		every { lotService.getTotalLot() } returns 10
+
+		val actualTotalLot = lotController.getTotalLots()
+
+		verify { lotService.getTotalLot()  }
+		assertThat(actualTotalLot.body).isEqualTo(10)
+
+	}
+
 }
