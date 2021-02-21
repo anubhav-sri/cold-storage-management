@@ -149,21 +149,18 @@ internal class LotServiceTest {
 	fun `should find summary in between`() {
 		val start = LocalDateTime.now().minusDays(3)
 		val end = LocalDateTime.now()
-		given(lotRepo.findSummaryByDateBetween(start, end)).willReturn(listOf(SummaryImpl(2, 3)))
+		val customer = Customer(UUID.randomUUID(), "name",
+				"fname", "addr1", "12342")
+		val lot = Lot(UUID.randomUUID(), LocalDateTime.now(), 20,
+				Weight(12.0, Weight.WeightUnit.KG),
+				Weight(23.0, Weight.WeightUnit.KG),
+				customer.id, type = "G4", serialNumber = 1, numberOfEmptyBagsGiven = 12)
 
-		assertThat(lotService.findSummaryBetween(start, end)).isEqualTo(SummaryImpl(2, 3))
+		given(lotRepo.findAllByDateBetween(start, end)).willReturn(listOf(lot))
 
-		verify(lotRepo).findSummaryByDateBetween(start, end)
+		assertThat(lotService.findSummaryBetween(start, end)).isEqualTo(Summary(20, 12))
+
+		verify(lotRepo).findAllByDateBetween(start, end)
 	}
 
-	private data class SummaryImpl(val numberOfBags1: Int, val numberOfEmptyBags1: Int) : Summary {
-
-		override fun getNumberOfBags(): Int {
-			return numberOfBags1
-		}
-
-		override fun getNumberOfEmptyBagsGiven(): Int {
-			return numberOfEmptyBags1
-		}
-	}
 }

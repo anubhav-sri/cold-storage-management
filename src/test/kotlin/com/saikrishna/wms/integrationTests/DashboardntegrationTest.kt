@@ -80,7 +80,8 @@ internal class DashboardntegrationTest {
 				.param("end", end.toString())
 				.header("auth", authToken))
 				.andExpect(status().isOk)
-				.andExpect(content().string(""))
+				.andExpect(jsonPath("$.numberOfEmptyBagsGiven", Is.`is`(0)))
+				.andExpect(jsonPath("$.numberOfBags", Is.`is`(0)))
 
 	}
 

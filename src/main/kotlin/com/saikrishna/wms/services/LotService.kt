@@ -33,8 +33,15 @@ class LotService(@Autowired private val lotRepo: LotRepository) {
 		return lotRepo.saveAll(lots)
 	}
 
-	fun findSummaryBetween(from: LocalDateTime, to: LocalDateTime): Summary? {
-		return lotRepo.findSummaryByDateBetween(from, to).firstOrNull()
+	fun findSummaryBetween(from: LocalDateTime, to: LocalDateTime): Summary {
+		val lots = lotRepo.findAllByDateBetween(from, to)
+		if (lots.isEmpty()) {
+			return Summary(0, 0)
+		}
+
+		val totalBags = lots.map { l -> l.numberOfBags }.reduce { sum, bags -> sum + bags }
+		val totalEmptyBags = lots.map { l -> l.numberOfEmptyBagsGiven }.reduce { sum, bags -> sum + bags }
+		return Summary(totalBags, totalEmptyBags)
 	}
 
 	fun getTotalLot(): Long {

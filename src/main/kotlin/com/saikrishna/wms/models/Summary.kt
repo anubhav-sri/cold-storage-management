@@ -1,7 +1,12 @@
 package com.saikrishna.wms.models
 
-interface Summary {
-	fun getNumberOfBags(): Int = 0
-	fun getNumberOfEmptyBagsGiven(): Int = 0
+data class Summary(private val numberOfBags: Int, private val numberOfEmptyBags: Int) {
+
+	fun getNumberOfBags(): Int {
+		return numberOfBags
+	}
+	fun getNumberOfEmptyBagsGiven(): Int {
+		return numberOfEmptyBags
+	}
 }
 
