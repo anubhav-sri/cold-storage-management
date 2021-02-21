@@ -149,7 +149,7 @@ internal class LotServiceTest {
 	fun `should find summary in between`() {
 		val start = LocalDateTime.now().minusDays(3)
 		val end = LocalDateTime.now()
-		given(lotRepo.findSummaryByDateBetween(start, end)).willReturn(SummaryImpl(2, 3))
+		given(lotRepo.findSummaryByDateBetween(start, end)).willReturn(listOf(SummaryImpl(2, 3)))
 
 		assertThat(lotService.findSummaryBetween(start, end)).isEqualTo(SummaryImpl(2, 3))
 

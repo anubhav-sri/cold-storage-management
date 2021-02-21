@@ -34,7 +34,7 @@ class LotService(@Autowired private val lotRepo: LotRepository) {
 	}
 
 	fun findSummaryBetween(from: LocalDateTime, to: LocalDateTime): Summary? {
-		return lotRepo.findSummaryByDateBetween(from, to)
+		return lotRepo.findSummaryByDateBetween(from, to).firstOrNull()
 	}
 
 	fun getTotalLot(): Long {
