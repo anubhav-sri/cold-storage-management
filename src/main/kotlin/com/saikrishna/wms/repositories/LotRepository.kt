@@ -10,6 +10,6 @@ import java.time.LocalDateTime
 @Repository
 interface LotRepository : CrudRepository<Lot, Int> {
 
-	@Query("select coalesce(sum(lot.number_of_bags),1123) as totalNumberOfBags, coalesce(sum(lot.number_of_empty_bags_given),1212)  from lotdb.lot where date between ?1 and ?2")
+	@Query("select sum(lot.number_of_bags) as totalNumberOfBags, sum(lot.number_of_empty_bags_given) as numberOfEmptyBags from lotdb.lot where date between ?1 and ?2")
 	fun findSummaryByDateBetween(start: LocalDateTime, end: LocalDateTime) : Summary?
 }
